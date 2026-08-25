@@ -32,12 +32,12 @@ let currentConfig: Record<string, any> = {
     }
   },
   "skills": {
-    "paths": ["~/.config/opencode/skill/react-patterns"],
+    "paths": ["https://github.com/OpenCode-Tweaker/skills/react-patterns"],
     "urls": []
   },
   "provider": {},
   "agent": {},
-  "theme": "imperial-dark",
+  "theme": "tweaker-dark",
   "permission": {},
   "instructions": "",
   "experimental": {}
@@ -134,22 +134,22 @@ app.post("/api/mcp/install", (req, res) => {
 app.get("/api/skills", (req, res) => {
   res.json({
     skills: [
-      { id: "react-patterns", name: "React 19 & Next.js Patterns", description: "Coding standards, Server Components, and custom hooks guidelines", path: "~/.config/opencode/skill/react-patterns", category: "development", tags: ["react", "nextjs", "frontend"] },
-      { id: "python-fastapi", name: "FastAPI & Async SQLAlchemy", description: "Pydantic v2 schemas, OpenAPI specs, and async database patterns", path: "~/.config/opencode/skill/python-fastapi", category: "development", tags: ["python", "fastapi", "backend"] },
-      { id: "security-audit", name: "OWASP Security Auditor", description: "Dependency auditing, vulnerability mitigation, and CORS configurations", path: "~/.config/opencode/skill/security-audit", category: "security", tags: ["security", "owasp", "audit"] },
-      { id: "tailwind-v4", name: "Tailwind CSS v4 Utility Suite", description: "Modern Tailwind v4 CSS variable setups and design system tokens", path: "~/.config/opencode/skill/tailwind-v4", category: "ui", tags: ["css", "tailwind", "styling"] },
-      { id: "prompt-engineering-pro", name: "Prompt Engineering Master", description: "System prompt optimization, few-shot patterns, and guardrails", path: "~/.config/opencode/skill/prompt-engineering", category: "ai", tags: ["prompts", "llm", "ai"] },
-      { id: "rust-tokio-async", name: "Rust Tokio Async Engine", description: "High-performance Rust async I/O, memory safety, and thread safety", path: "~/.config/opencode/skill/rust-tokio", category: "development", tags: ["rust", "async", "backend"] },
-      { id: "k8s-helm-ops", name: "Kubernetes & Helm Deployment Ops", description: "Declarative K8s manifests, Helm charts, and ingress controllers", path: "~/.config/opencode/skill/k8s-helm", category: "devops", tags: ["k8s", "helm", "devops"] },
-      { id: "system-architecture", name: "Distributed System Architecture", description: "Microservices design, event-driven architectures, and domain-driven design", path: "~/.config/opencode/skill/system-architecture", category: "architecture", tags: ["system", "architecture", "microservices"] },
-      { id: "graphql-schema", name: "GraphQL Schema & Federation", description: "GraphQL schema design, dataloaders, and Apollo Federation", path: "~/.config/opencode/skill/graphql-schema", category: "development", tags: ["graphql", "api", "schema"] },
-      { id: "go-concurrency", name: "Go Concurrency & Channels", description: "Goroutines, worker pools, channels, and context propagation", path: "~/.config/opencode/skill/go-concurrency", category: "development", tags: ["go", "concurrency", "channels"] },
-      { id: "pytorch-pipeline", name: "PyTorch Deep Learning Pipelines", description: "Model architectures, custom dataloaders, and PyTorch Lightning", path: "~/.config/opencode/skill/pytorch-pipeline", category: "ai", tags: ["pytorch", "ai", "deep-learning"] },
-      { id: "wasm-rust-engine", name: "WebAssembly & Rust Engine", description: "Compile Rust to Wasm, JS bindings, and SIMD web performance", path: "~/.config/opencode/skill/wasm-rust", category: "development", tags: ["wasm", "rust", "performance"] },
-      { id: "docker-compose-mastery", name: "Docker Compose & Container Networking", description: "Multi-container environment orchestation, volume persistent mounts, and health checks", path: "~/.config/opencode/skill/docker-compose", category: "devops", tags: ["docker", "networking"] },
-      { id: "cybersecurity-pentest", name: "Ethical Hacking & Pentest Safeguards", description: "SQL injection prevention, XSS sanitization, CSRF tokens, and security header hardening", path: "~/.config/opencode/skill/cybersecurity", category: "security", tags: ["security", "pentest"] },
-      { id: "microservices-cqrs", name: "CQRS & Event Sourcing Patterns", description: "Command Query Responsibility Segregation, Kafka event streams, and event replay engines", path: "~/.config/opencode/skill/cqrs-events", category: "architecture", tags: ["cqrs", "kafka", "events"] },
-      { id: "cloud-native-aws", name: "Cloud-Native Serverless & DynamoDB", description: "AWS Lambda, EventBridge, SQS queues, and single-table DynamoDB design patterns", path: "~/.config/opencode/skill/cloud-native", category: "cloud", tags: ["aws", "serverless"] }
+      { id: "react-patterns", name: "React 19 & Next.js Patterns", description: "Coding standards, Server Components, and custom hooks guidelines", path: "https://github.com/OpenCode-Tweaker/skills/react-patterns", category: "development", tags: ["react", "nextjs", "frontend"] },
+      { id: "python-fastapi", name: "FastAPI & Async SQLAlchemy", description: "Pydantic v2 schemas, OpenAPI specs, and async database patterns", path: "https://github.com/OpenCode-Tweaker/skills/python-fastapi", category: "development", tags: ["python", "fastapi", "backend"] },
+      { id: "security-audit", name: "OWASP Security Auditor", description: "Dependency auditing, vulnerability mitigation, and CORS configurations", path: "https://github.com/OpenCode-Tweaker/skills/security-audit", category: "security", tags: ["security", "owasp", "audit"] },
+      { id: "tailwind-v4", name: "Tailwind CSS v4 Utility Suite", description: "Modern Tailwind v4 CSS variable setups and design system tokens", path: "https://github.com/OpenCode-Tweaker/skills/tailwind-v4", category: "ui", tags: ["css", "tailwind", "styling"] },
+      { id: "prompt-engineering-pro", name: "Prompt Engineering Master", description: "System prompt optimization, few-shot patterns, and guardrails", path: "https://github.com/OpenCode-Tweaker/skills/prompt-engineering", category: "ai", tags: ["prompts", "llm", "ai"] },
+      { id: "rust-tokio-async", name: "Rust Tokio Async Engine", description: "High-performance Rust async I/O, memory safety, and thread safety", path: "https://github.com/OpenCode-Tweaker/skills/rust-tokio", category: "development", tags: ["rust", "async", "backend"] },
+      { id: "k8s-helm-ops", name: "Kubernetes & Helm Deployment Ops", description: "Declarative K8s manifests, Helm charts, and ingress controllers", path: "https://github.com/OpenCode-Tweaker/skills/k8s-helm", category: "devops", tags: ["k8s", "helm", "devops"] },
+      { id: "system-architecture", name: "Distributed System Architecture", description: "Microservices design, event-driven architectures, and domain-driven design", path: "https://github.com/OpenCode-Tweaker/skills/system-architecture", category: "architecture", tags: ["system", "architecture", "microservices"] },
+      { id: "graphql-schema", name: "GraphQL Schema & Federation", description: "GraphQL schema design, dataloaders, and Apollo Federation", path: "https://github.com/OpenCode-Tweaker/skills/graphql-schema", category: "development", tags: ["graphql", "api", "schema"] },
+      { id: "go-concurrency", name: "Go Concurrency & Channels", description: "Goroutines, worker pools, channels, and context propagation", path: "https://github.com/OpenCode-Tweaker/skills/go-concurrency", category: "development", tags: ["go", "concurrency", "channels"] },
+      { id: "pytorch-pipeline", name: "PyTorch Deep Learning Pipelines", description: "Model architectures, custom dataloaders, and PyTorch Lightning", path: "https://github.com/OpenCode-Tweaker/skills/pytorch-pipeline", category: "ai", tags: ["pytorch", "ai", "deep-learning"] },
+      { id: "wasm-rust-engine", name: "WebAssembly & Rust Engine", description: "Compile Rust to Wasm, JS bindings, and SIMD web performance", path: "https://github.com/OpenCode-Tweaker/skills/wasm-rust", category: "development", tags: ["wasm", "rust", "performance"] },
+      { id: "docker-compose-mastery", name: "Docker Compose & Container Networking", description: "Multi-container environment orchestation, volume persistent mounts, and health checks", path: "https://github.com/OpenCode-Tweaker/skills/docker-compose", category: "devops", tags: ["docker", "networking"] },
+      { id: "cybersecurity-pentest", name: "Ethical Hacking & Pentest Safeguards", description: "SQL injection prevention, XSS sanitization, CSRF tokens, and security header hardening", path: "https://github.com/OpenCode-Tweaker/skills/cybersecurity", category: "security", tags: ["security", "pentest"] },
+      { id: "microservices-cqrs", name: "CQRS & Event Sourcing Patterns", description: "Command Query Responsibility Segregation, Kafka event streams, and event replay engines", path: "https://github.com/OpenCode-Tweaker/skills/cqrs-events", category: "architecture", tags: ["cqrs", "kafka", "events"] },
+      { id: "cloud-native-aws", name: "Cloud-Native Serverless & DynamoDB", description: "AWS Lambda, EventBridge, SQS queues, and single-table DynamoDB design patterns", path: "https://github.com/OpenCode-Tweaker/skills/cloud-native", category: "cloud", tags: ["aws", "serverless"] }
     ]
   });
 });
@@ -260,7 +260,7 @@ app.get("/api/providers", (req, res) => {
 app.get("/api/themes", (req, res) => {
   res.json({
     themes: [
-      { id: "imperial-dark", name: "Imperial Dark", author: "IMPERIAL Team", category: "dark", popular: true, colors: ["#0f0d13", "#dc2626", "#ef4444", "#22c55e"] },
+      { id: "tweaker-dark", name: "Tweaker Dark", author: "Tweaker Team", category: "dark", popular: true, colors: ["#0f0d13", "#dc2626", "#ef4444", "#22c55e"] },
       { id: "cyberpunk-red", name: "Cyberpunk Red", author: "NeonDev", category: "dark", popular: true, colors: ["#0d0221", "#ff0055", "#00f5d4", "#fee440"] },
       { id: "dracula-synth", name: "Dracula Synth", author: "Zeno Rocha", category: "dark", popular: true, colors: ["#282a36", "#bd93f9", "#ff79c6", "#50fa7b"] },
       { id: "monokai-pro", name: "Monokai Pro", author: "Monokai", category: "dark", popular: true, colors: ["#2d2a2e", "#ffd866", "#ff6188", "#a9dc76"] },
@@ -270,7 +270,7 @@ app.get("/api/themes", (req, res) => {
       { id: "one-dark-pro", name: "One Dark Pro", author: "binaryify", category: "dark", popular: true, colors: ["#282c34", "#61afef", "#c678dd", "#98c379"] },
       { id: "gruvbox-dark", name: "Gruvbox Dark", author: "morhetz", category: "dark", popular: false, colors: ["#282828", "#fe8019", "#fabd2f", "#b8bb26"] },
       { id: "solarized-dark", name: "Solarized Dark", author: "Ethan Schoonover", category: "dark", popular: false, colors: ["#002b36", "#268bd2", "#d33682", "#859900"] },
-      { id: "obsidian-oled", name: "Obsidian OLED Black", author: "IMPERIAL Lab", category: "dark", popular: true, colors: ["#000000", "#e11d48", "#f43f5e", "#10b981"] },
+      { id: "obsidian-oled", name: "Obsidian OLED Black", author: "Tweaker Lab", category: "dark", popular: true, colors: ["#000000", "#e11d48", "#f43f5e", "#10b981"] },
       { id: "emerald-matrix", name: "Emerald Matrix", author: "CyberOps", category: "dark", popular: false, colors: ["#05180f", "#10b981", "#34d399", "#059669"] },
       { id: "horizon-synth", name: "Horizon Synthetic", author: "Ayu Design", category: "dark", popular: false, colors: ["#1c1e26", "#e95678", "#26bbd9", "#29d398"] },
       { id: "clean-light", name: "Clean Minimal Light", author: "Studio Minimal", category: "light", popular: false, colors: ["#f8f9fa", "#2563eb", "#3b82f6", "#10b981"] },
@@ -335,7 +335,7 @@ app.post("/api/opencode/full-cycle", (req, res) => {
 });
 
 app.get("/api/opencode/config-path", (req, res) => {
-  res.json({ path: "~/.config/opencode/opencode.json" });
+  res.json({ path: "https://github.com/OpenCode-Tweaker/configs/opencode.json" });
 });
 
 app.get("/api/system/info", (req, res) => {
@@ -343,7 +343,7 @@ app.get("/api/system/info", (req, res) => {
   res.json({
     version: "v1.18.5",
     path: "/usr/local/bin/opencode",
-    configs: ["~/.config/opencode/opencode.json"],
+    configs: ["https://github.com/OpenCode-Tweaker/configs/opencode.json"],
     auth_providers: ["Anthropic", "OpenAI", "Google", "DeepSeek", "Ollama", "Mistral AI"],
     runtime: "Node.js v20+ / Cloud Run Sandboxed Container",
     port: 3000,
@@ -389,7 +389,7 @@ app.get("/", (req, res) => {
   if (fs.existsSync(htmlPath)) {
     res.sendFile(htmlPath);
   } else {
-    res.send("IMPERIAL OpenCode Configurator");
+    res.send("OpenCode Tweaker Configurator");
   }
 });
 
@@ -415,7 +415,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`IMPERIAL Configurator running on http://0.0.0.0:${PORT}`);
+    console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 }
 

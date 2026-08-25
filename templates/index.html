@@ -1187,7 +1187,7 @@
         if (pcbCanvas) pcbCanvas.style.display = 'none';
         if (btn) btn.textContent = '🌧 Wallpaper: Matrix';
         initMatrixRainCanvas();
-        showToast('Wallpaper: Matrix Rain (Imperial Crimson) aktiviert', 'success');
+        showToast('Wallpaper: Matrix Rain (Tweaker Crimson) aktiviert', 'success');
       }
     }
 
@@ -1764,21 +1764,51 @@
           <div class="theme-body">
             <div style="font-weight: 600; font-size: 13px; color: #fff;">${t.name}</div>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">von ${t.author || 'Community'}</div>
+            <button class="btn btn-secondary btn-sm" style="margin-top: 10px; width: 100%; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);" onclick="previewTheme('${t.id}', event)">👁️ Live Preview</button>
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
+    function applyThemeColors(tObj) {
+      if (!tObj || !tObj.colors) return;
+      const root = document.documentElement.style;
+      if (tObj.colors[0]) {
+        root.setProperty('--bg', tObj.colors[0]);
+        // Also tweak surface a bit based on bg (not perfect but OK)
+        root.setProperty('--bg-surface', tObj.colors[0]); 
+      }
+      if (tObj.colors[1]) {
+        root.setProperty('--accent', tObj.colors[1]);
+        root.setProperty('--border-focus', tObj.colors[1] + '99');
+      }
+      if (tObj.colors[2]) {
+        root.setProperty('--accent-hover', tObj.colors[2]);
+        root.setProperty('--accent-bright', tObj.colors[2]);
+      }
+      if (tObj.colors[3]) {
+        root.setProperty('--emerald', tObj.colors[3]);
+      }
+    }
+
+    function previewTheme(themeId, event) {
+      if (event) event.stopPropagation();
+      const tObj = allThemes.find(t => t.id === themeId);
+      if (tObj) {
+        applyThemeColors(tObj);
+        showToast(`Live Preview aktiv: ${tObj.name}`, 'info');
+      }
+    }
+
     function selectTheme(themeId) {
       currentConfig.theme = themeId;
       const tObj = allThemes.find(t => t.id === themeId);
-      if (tObj && tObj.colors && tObj.colors.length >= 2) {
-        document.documentElement.style.setProperty('--primary', tObj.colors[1] || '#dc2626');
-        document.documentElement.style.setProperty('--primary-hover', tObj.colors[2] || '#ef4444');
+      if (tObj) {
+        applyThemeColors(tObj);
       }
       renderThemes();
-      showToast(`Theme angewendet: ${tObj ? tObj.name : themeId}`, 'success');
+      showToast(`Theme ausgewählt: ${tObj ? tObj.name : themeId}`, 'success');
     }
 
     function filterThemes() {
