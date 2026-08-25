@@ -49,9 +49,62 @@ app.get("/api/config", (req, res) => {
 });
 
 app.post("/api/config", (req, res) => {
-  const newConfig = req.body || {};
-  // Deep merge
-  currentConfig = { ...currentConfig, ...newConfig };
+  try {
+    const newConfig = req.body || {};
+    // Safe merge preserving schema
+    currentConfig = {
+      "$schema": "https://opencode.ai/config.json",
+      ...currentConfig,
+      ...newConfig
+    };
+    res.json(currentConfig);
+  } catch (err: any) {
+    res.status(400).json({ error: "Invalid configuration payload", details: err?.message });
+  }
+});
+
+app.post("/api/config/reset", (req, res) => {
+  currentConfig = {
+    "$schema": "https://opencode.ai/config.json",
+    "model": "anthropic/claude-3-7-sonnet",
+    "small_model": "anthropic/claude-3-5-haiku",
+    "default_agent": "build",
+    "plugin": ["opencode-git", "opencode-theme", "opencode-linter", "opencode-security"],
+    "mcp": {
+      "filesystem": {
+        "type": "local",
+        "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem"],
+        "enabled": true,
+        "environment": {}
+      },
+      "memory": {
+        "type": "local",
+        "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+        "enabled": true,
+        "environment": {}
+      }
+    },
+    "lsp": {
+      "typescript-language-server": {
+        "command": ["typescript-language-server", "--stdio"],
+        "extensions": [".ts", ".tsx", ".js", ".jsx"],
+        "disabled": false
+      }
+    },
+    "skills": {
+      "paths": [
+        "https://github.com/OpenCode-Tweaker/skills/react-patterns",
+        "https://github.com/OpenCode-Tweaker/skills/prompt-engineering"
+      ],
+      "urls": []
+    },
+    "provider": {},
+    "agent": {},
+    "theme": "tweaker-dark",
+    "permission": {},
+    "instructions": "",
+    "experimental": {}
+  };
   res.json(currentConfig);
 });
 

@@ -6,31 +6,32 @@
   <title>OpenCode - Tweaker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #07080b;
       --bg-surface: #0e1017;
       --bg-surface-elevated: #151824;
-      --bg-card: rgba(21, 24, 34, 0.75);
+      --bg-card: rgba(21, 24, 34, 0.85);
       
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       
-      /* Vibrant Tweaker Blue Palette */
+      /* Vibrant Tweaker Cyber-Blue Palette */
       --accent: #3b82f6;
       --accent-hover: #60a5fa;
-      --accent-glow: rgba(59, 130, 246, 0.4);
+      --accent-glow: rgba(59, 130, 246, 0.35);
       --accent-bright: #2563eb;
       
       --emerald: #10b981;
       --amber: #f59e0b;
       --sky: #06b6d4;
       --indigo: #6366f1;
+      --rose: #f43f5e;
       
       --border: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(220, 38, 38, 0.6);
+      --border-focus: rgba(59, 130, 246, 0.6);
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
@@ -58,7 +59,7 @@
       position: relative;
     }
 
-    /* BACKGROUND CANVAS */
+    /* BACKGROUND CANVASES */
     #pcb-canvas {
       position: fixed;
       top: 0;
@@ -106,46 +107,53 @@
       flex-direction: column;
       height: 100vh;
       width: 100vw;
-      background: rgba(7, 8, 11, 0.22);
-      backdrop-filter: blur(3px);
+      background: rgba(7, 8, 11, 0.4);
+      backdrop-filter: blur(4px);
     }
 
     /* HEADER BAR */
     .top-header {
       height: 64px;
-      background: rgba(14, 16, 23, 0.92);
+      background: rgba(14, 16, 23, 0.95);
       border-bottom: 1px solid rgba(59, 130, 246, 0.25);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 24px;
       flex-shrink: 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      gap: 16px;
     }
 
     .brand-section {
       display: flex;
       align-items: center;
       gap: 14px;
+      flex-shrink: 0;
     }
 
     .brand-logo {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-      border-radius: 9px;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.05);
     }
 
     .brand-logo svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       color: #ffffff;
-      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
     }
 
     .brand-title {
@@ -199,13 +207,14 @@
 
     .status-dot.active {
       background-color: var(--emerald);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     /* BUTTON SUITE */
@@ -226,17 +235,23 @@
       text-decoration: none;
     }
 
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
     .btn-primary {
-      background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
-      border-color: rgba(59, 130, 246, 0.4);
-      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.35);
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.4);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.55);
       transform: translateY(-1px);
     }
 
@@ -247,30 +262,37 @@
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
     }
 
     .btn-success {
       background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.3);
+      border-color: rgba(16, 185, 129, 0.35);
       color: #34d399;
     }
 
     .btn-success:hover {
       background: rgba(16, 185, 129, 0.25);
+      border-color: rgba(16, 185, 129, 0.6);
       color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+      transform: translateY(-1px);
     }
 
     .btn-danger {
       background: rgba(239, 68, 68, 0.15);
-      border-color: rgba(239, 68, 68, 0.3);
+      border-color: rgba(239, 68, 68, 0.35);
       color: #fca5a5;
     }
 
     .btn-danger:hover {
       background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.6);
       color: #ffffff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+      transform: translateY(-1px);
     }
 
     .btn-sm {
@@ -288,14 +310,15 @@
 
     /* SIDEBAR NAVIGATION */
     .sidebar {
-      width: 240px;
-      background: rgba(11, 13, 19, 0.9);
+      width: 250px;
+      background: rgba(11, 13, 19, 0.95);
       border-right: 1px solid var(--border);
       padding: 16px 12px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       flex-shrink: 0;
+      overflow-y: auto;
     }
 
     .nav-label {
@@ -304,13 +327,17 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--text-dim);
-      padding: 8px 10px 4px 10px;
+      padding: 12px 10px 4px 10px;
+    }
+
+    .nav-label:first-child {
+      padding-top: 4px;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       padding: 9px 12px;
       border-radius: var(--radius-sm);
       font-size: 13px;
@@ -321,16 +348,23 @@
       border: 1px solid transparent;
     }
 
+    .nav-item-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .nav-item svg {
       width: 16px;
       height: 16px;
       color: var(--text-dim);
       transition: color 0.15s ease;
+      flex-shrink: 0;
     }
 
     .nav-item:hover {
       color: var(--text-main);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .nav-item:hover svg {
@@ -338,17 +372,32 @@
     }
 
     .nav-item.active {
-      color: var(--text-main);
-      background: rgba(220, 38, 38, 0.14);
-      border-color: rgba(239, 68, 68, 0.4);
+      color: #ffffff;
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(59, 130, 246, 0.4);
       border-left: 3px solid var(--accent);
-      padding-left: 11px;
+      padding-left: 10px;
       font-weight: 700;
+      box-shadow: inset 0 0 12px rgba(59, 130, 246, 0.15);
     }
 
     .nav-item.active svg {
-      color: #ef4444;
-      filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
+      color: #60a5fa;
+      filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.7));
+    }
+
+    .nav-badge-count {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .nav-item.active .nav-badge-count {
+      background: rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
     }
 
     .sidebar-footer {
@@ -367,12 +416,12 @@
       flex: 1;
       padding: 24px;
       overflow-y: auto;
-      background: rgba(8, 9, 13, 0.4);
+      background: rgba(8, 9, 13, 0.5);
     }
 
     .tab-section {
       display: none;
-      animation: fadeIn 0.25s ease forwards;
+      animation: fadeIn 0.2s ease forwards;
     }
 
     .tab-section.active {
@@ -391,6 +440,8 @@
       margin-bottom: 20px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .section-title {
@@ -417,7 +468,7 @@
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(22, 26, 38, 0.85) 0%, rgba(14, 16, 23, 0.85) 100%);
+      background: linear-gradient(180deg, rgba(22, 26, 38, 0.9) 0%, rgba(14, 16, 23, 0.9) 100%);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-md);
       padding: 20px;
@@ -427,7 +478,7 @@
     }
 
     .card:hover {
-      border-color: rgba(239, 68, 68, 0.3);
+      border-color: rgba(59, 130, 246, 0.35);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.5);
     }
 
@@ -462,6 +513,7 @@
       display: flex;
       gap: 6px;
       margin-bottom: 16px;
+      flex-wrap: wrap;
     }
 
     .sub-tab {
@@ -474,14 +526,46 @@
       border: 1px solid var(--border);
       cursor: pointer;
       transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
     }
 
     .sub-tab.active {
-      background: rgba(220, 38, 38, 0.18);
-      border-color: rgba(239, 68, 68, 0.45);
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.5);
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 0 12px rgba(220, 38, 38, 0.2);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+    }
+
+    /* SEARCH BAR WITH CLEAR */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .search-clear-btn:hover {
+      color: var(--text-main);
     }
 
     /* INPUT & FORM ELEMENTS */
@@ -499,6 +583,7 @@
 
     .input-field:focus, .select-field:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-glow);
     }
 
     textarea.input-field {
@@ -506,37 +591,292 @@
       padding: 12px;
       font-family: 'JetBrains Mono', Consolas, monospace;
       font-size: 12px;
+      line-height: 20px;
+    }
+
+    /* REAL-TIME SYNTAX HIGHLIGHTER CODE EDITOR */
+    .code-editor-container {
+      display: flex;
+      position: relative;
+      background: rgba(10, 12, 18, 0.95);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      height: 440px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .code-editor-container.has-syntax-error {
+      border-color: rgba(244, 63, 94, 0.65);
+      box-shadow: inset 0 0 0 1px rgba(244, 63, 94, 0.3), 0 0 16px rgba(244, 63, 94, 0.18);
+    }
+
+    .code-editor-container:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-glow);
+    }
+
+    .code-editor-container.has-syntax-error:focus-within {
+      border-color: #f43f5e;
+      box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.5), 0 0 16px rgba(244, 63, 94, 0.2);
+    }
+
+    .editor-gutter {
+      width: 46px;
+      background: rgba(6, 8, 12, 0.95);
+      border-right: 1px solid var(--border);
+      padding: 12px 0;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 11px;
+      line-height: 20px;
+      text-align: right;
+      user-select: none;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .gutter-line {
+      height: 20px;
+      padding-right: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      transition: background 0.15s ease, color 0.15s ease;
+      cursor: default;
+    }
+
+    .gutter-line.has-error {
+      color: #f43f5e;
+      font-weight: 700;
+      background: rgba(244, 63, 94, 0.22);
+      cursor: pointer;
+    }
+
+    .gutter-error-icon {
+      position: absolute;
+      left: 4px;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse-err 1.6s infinite ease-in-out;
+    }
+
+    @keyframes pulse-err {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.85; filter: drop-shadow(0 0 6px #f43f5e); }
+    }
+
+    .editor-stage-wrap {
+      position: relative;
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .editor-backdrop {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .editor-highlights {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 12px;
+      margin: 0;
+      font-family: 'JetBrains Mono', Consolas, monospace !important;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      box-sizing: border-box;
+      color: transparent;
+      pointer-events: none;
+      tab-size: 2;
+    }
+
+    .editor-textarea {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 12px;
+      margin: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', Consolas, monospace !important;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      box-sizing: border-box;
+      caret-color: #60a5fa;
+      resize: none;
+      overflow: auto;
+      z-index: 2;
+      tab-size: 2;
+    }
+
+    /* RED SQUIGGLY HIGHLIGHT DIRECTLY UNDER INVALID JSON TOKENS */
+    .json-err-underline {
+      color: transparent;
+      text-decoration: underline wavy #f43f5e !important;
+      text-decoration-thickness: 2px !important;
+      text-underline-offset: 3px !important;
+      background: rgba(244, 63, 94, 0.28) !important;
+      border-radius: 2px;
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.5);
+      display: inline;
+      position: relative;
+    }
+
+    /* FLOATING HOVER ERROR TOOLTIP */
+    .json-error-tooltip {
+      position: fixed;
+      z-index: 10000;
+      background: #11141f;
+      border: 1px solid #f43f5e;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px rgba(244, 63, 94, 0.35);
+      max-width: 420px;
+      display: none;
+      pointer-events: none;
+      animation: tooltipFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 12px;
       line-height: 1.5;
+    }
+
+    @keyframes tooltipFadeIn {
+      from { opacity: 0; transform: translateY(6px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .tooltip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tooltip-title {
+      font-weight: 700;
+      color: #f43f5e;
+      font-size: 12.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tooltip-badge {
+      font-size: 10px;
+      background: rgba(244, 63, 94, 0.22);
+      color: #fecdd3;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .tooltip-msg {
+      color: #f8fafc;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .tooltip-suggestion {
+      background: rgba(59, 130, 246, 0.15);
+      border-left: 3px solid #3b82f6;
+      padding: 6px 10px;
+      border-radius: 3px;
+      font-size: 11.5px;
+      color: #bfdbfe;
+      margin-bottom: 8px;
+    }
+
+    .tooltip-preview {
+      background: rgba(0, 0, 0, 0.55);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 11px;
+      color: #fb7185;
+      white-space: pre;
+      overflow-x: auto;
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+
+    /* ERROR BANNER */
+    .json-error-banner {
+      margin-top: 12px;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .error-loc-tag {
+      background: rgba(244, 63, 94, 0.25);
+      color: #fecdd3;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      margin-left: 6px;
     }
 
     /* ITEM CARDS GRID */
     .item-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
       gap: 14px;
     }
 
     .item-card {
-      background: rgba(18, 20, 29, 0.7);
+      background: rgba(18, 20, 29, 0.75);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 14px;
+      padding: 16px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: 140px;
     }
 
     .item-card:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.25);
       transform: translateY(-2px);
+      background: rgba(22, 26, 38, 0.85);
     }
 
     .item-card.selected {
       border-color: var(--accent);
-      background: rgba(244, 63, 94, 0.08);
-      box-shadow: 0 0 12px rgba(244, 63, 94, 0.15);
+      background: rgba(59, 130, 246, 0.12);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
     }
 
     .item-header {
@@ -544,19 +884,22 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 8px;
+      gap: 8px;
     }
 
     .item-title {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--text-main);
+      line-height: 1.3;
     }
 
     .item-desc {
       font-size: 11.5px;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
       margin-bottom: 12px;
+      flex: 1;
     }
 
     .item-footer {
@@ -564,68 +907,80 @@
       justify-content: space-between;
       align-items: center;
       margin-top: auto;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     /* BADGES & PILLS */
     .badge {
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       padding: 2px 7px;
       border-radius: 12px;
       text-transform: uppercase;
       letter-spacing: 0.3px;
+      white-space: nowrap;
     }
 
-    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .badge-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-    .badge-gold { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .badge-red { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-gold { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-gray { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); border: 1px solid var(--border); }
 
     .tag-pill {
-      font-size: 10px;
+      font-size: 10.5px;
       color: var(--text-dim);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       padding: 2px 6px;
       border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     /* THEME CARDS */
     .themes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 14px;
     }
 
     .theme-card {
-      background: rgba(18, 20, 29, 0.8);
+      background: rgba(18, 20, 29, 0.85);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       overflow: hidden;
       cursor: pointer;
       transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .theme-card:hover {
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
     .theme-card.active-theme {
       border-color: var(--emerald);
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
     }
 
     .theme-preview-bar {
-      height: 32px;
+      height: 34px;
       display: flex;
     }
 
     .theme-body {
-      padding: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
     }
 
-    /* TOAST NOTIFICATION */
+    /* TOAST NOTIFICATIONS */
     #notification-area {
       position: fixed;
       bottom: 20px;
@@ -641,18 +996,22 @@
       padding: 10px 16px;
       border-radius: var(--radius-sm);
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       color: #ffffff;
       background: var(--bg-surface-elevated);
       border: 1px solid var(--border);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      animation: toastIn 0.2s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      animation: toastIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .toast-success { border-left: 3px solid var(--emerald); }
-    .toast-error { border-left: 3px solid var(--accent); }
-    .toast-warning { border-left: 3px solid var(--amber); }
+    .toast-success { border-left: 4px solid var(--emerald); }
+    .toast-error { border-left: 4px solid var(--rose); }
+    .toast-warning { border-left: 4px solid var(--amber); }
+    .toast-info { border-left: 4px solid var(--accent); }
 
     @keyframes toastIn {
       from { opacity: 0; transform: translateX(20px); }
@@ -663,24 +1022,31 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
       z-index: 9999;
       display: none;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.15s ease;
     }
     
     .modal-content {
       background: var(--bg-surface-elevated);
       border: 1px solid var(--border-focus);
-      width: 600px;
-      max-width: 90vw;
+      width: 640px;
+      max-width: 92vw;
       border-radius: var(--radius-lg);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(59, 130, 246, 0.4);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      animation: modalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
     
     .modal-header {
@@ -689,36 +1055,56 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.25);
     }
     
     .modal-title {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       color: var(--accent-hover);
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
+    .modal-close-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .modal-close-icon:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
     
     .modal-body {
-      padding: 24px;
+      padding: 20px 24px;
       max-height: 60vh;
       overflow-y: auto;
-      font-size: 13px;
+      font-size: 12.5px;
       line-height: 1.6;
     }
     
     .ai-log-line {
       margin-bottom: 8px;
       font-family: 'JetBrains Mono', monospace;
-      padding: 6px 12px;
+      padding: 8px 12px;
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.2);
-      border-left: 2px solid transparent;
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid transparent;
       opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
+      transform: translateY(6px);
+      transition: all 0.25s ease;
     }
     
     .ai-log-line.show {
@@ -726,17 +1112,214 @@
       transform: translateY(0);
     }
     
-    .ai-log-line:last-child {
-      margin-bottom: 0;
-    }
-    
     .modal-footer {
-      padding: 16px 24px;
+      padding: 14px 24px;
       border-top: 1px solid var(--border);
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* COMMAND PALETTE STYLES */
+    .cmd-palette-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 7, 11, 0.78);
+      backdrop-filter: blur(10px);
+      z-index: 11000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 12vh;
+      animation: fadeIn 0.12s ease;
+    }
+
+    .cmd-palette-modal {
+      background: #0f121a;
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      border-radius: var(--radius-lg);
+      width: 620px;
+      max-width: 94vw;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 30px rgba(59, 130, 246, 0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: cmdSlideDown 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cmdSlideDown {
+      from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .cmd-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
       gap: 12px;
-      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .cmd-input-icon {
+      color: var(--accent-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cmd-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    .cmd-search-input::placeholder {
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .cmd-shortcut-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .cmd-results-list {
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cmd-group-header {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 8px 12px 4px 12px;
+      font-weight: 700;
+    }
+
+    .cmd-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 13px;
+      transition: all 0.1s ease;
+      user-select: none;
+    }
+
+    .cmd-item:hover, .cmd-item.selected {
+      background: rgba(59, 130, 246, 0.2);
+      color: #ffffff;
+      border-left: 3px solid var(--accent);
+      padding-left: 11px;
+    }
+
+    .cmd-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cmd-item-icon {
+      color: var(--accent-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+    }
+
+    .cmd-item-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-left: 6px;
+    }
+
+    .cmd-item-badge {
+      font-size: 10.5px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cmd-empty-state {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .cmd-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .cmd-footer-keys {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cmd-footer-key {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cmd-footer-key kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* RESPONSIVE LAYOUT */
+    @media (max-width: 960px) {
+      .sidebar {
+        width: 210px;
+      }
+      .top-header {
+        padding: 0 16px;
+      }
+      .content-area {
+        padding: 16px;
+      }
+      .editor-split-view {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
@@ -748,13 +1331,13 @@
     <!-- TOP HEADER BAR -->
     <header class="top-header">
       <div class="brand-section">
-        <div class="brand-logo">
+        <div class="brand-logo" title="OpenCode Tweaker">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
           </svg>
         </div>
         <span class="brand-title">OPENCODE - TWEAKER</span>
-        <span class="brand-tag">Tweaker v2.0</span>
+        <span class="brand-tag">v2.1 Pro</span>
       </div>
 
       <div class="header-status">
@@ -765,6 +1348,10 @@
       </div>
 
       <div class="header-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openCommandPalette()" id="btn-cmd-palette" title="Befehlspalette öffnen (Ctrl+K)">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Befehle <span class="cmd-shortcut-tag" style="margin-left: 6px; padding: 1px 5px; font-size: 10px;">Ctrl+K</span>
+        </button>
         <button class="btn btn-secondary btn-sm" onclick="runAiCheckFix()" id="btn-ai-check">✨ AI Check & Fix</button>
         <button class="btn btn-secondary btn-sm" onclick="toggleWallpaper()" id="btn-wallpaper-toggle">🌧 Wallpaper: Matrix</button>
         <button class="btn btn-secondary btn-sm" onclick="saveConfig()">Config Speichern</button>
@@ -779,46 +1366,64 @@
         <!-- SUB-KATEGORIE 1: CORE CONFIGURATION -->
         <div class="nav-label">Core Config</div>
         <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-          Dashboard & Status
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
         </div>
         <div class="nav-item" onclick="switchTab('config')" id="nav-config">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          opencode.json Editor
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            opencode.json
+          </div>
+          <span class="nav-badge-count" id="sidebar-json-badge">JSON</span>
         </div>
 
         <!-- SUB-KATEGORIE 2: KI & PROMPT MANAGEMENT -->
         <div class="nav-label">KI & Prompts</div>
         <div class="nav-item" onclick="switchTab('provider')" id="nav-provider">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-          KI-Modelle & Provider
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            KI-Modelle
+          </div>
+          <span class="nav-badge-count" id="sidebar-models-badge">LLM</span>
         </div>
         <div class="nav-item" onclick="switchTab('erweiterungen')" id="nav-erweiterungen">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          Plugins & Skills
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Plugins & Skills
+          </div>
+          <span class="nav-badge-count" id="sidebar-plugins-badge">0</span>
         </div>
 
         <!-- SUB-KATEGORIE 3: PROTOKOLLE & INTEGRATIONEN -->
         <div class="nav-label">Integrationen</div>
         <div class="nav-item" onclick="switchTab('integrationen')" id="nav-integrationen">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          MCP & LSP Server
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            MCP & LSP Server
+          </div>
+          <span class="nav-badge-count" id="sidebar-mcplsp-badge">0</span>
         </div>
 
         <!-- SUB-KATEGORIE 4: VISUALS & SYSTEM -->
         <div class="nav-label">Visuals & System</div>
         <div class="nav-item" onclick="switchTab('design')" id="nav-design">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg>
-          Themes & Visuals
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg>
+            Themes & Visuals
+          </div>
         </div>
         <div class="nav-item" onclick="switchTab('system')" id="nav-system">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          System & Deployment
+          <div class="nav-item-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            System & Runtime
+          </div>
         </div>
 
         <div class="sidebar-footer">
           <span>Tweaker Engine</span>
-          <span style="color: var(--emerald);">● Online</span>
+          <span style="color: var(--emerald); font-weight: 700;">● Online</span>
         </div>
       </nav>
 
@@ -829,7 +1434,7 @@
           <div class="section-header">
             <div>
               <div class="section-title">System Dashboard</div>
-              <div class="section-subtitle">Aktivierte Instanzen, Mod-Metriken & Schnellzugriff</div>
+              <div class="section-subtitle">Aktive Module, Mod-Metriken & Konfigurations-Schnellstart</div>
             </div>
             <div class="header-actions">
               <button class="btn btn-secondary btn-sm" onclick="saveConfig()">Konfiguration Sichern</button>
@@ -856,7 +1461,7 @@
             </div>
             <div class="card">
               <div class="card-title">Haupt KI-Modell</div>
-              <div class="stat-value" id="stat-model" style="font-size: 16px; margin-top: 6px; word-break: break-all;">-</div>
+              <div class="stat-value" id="stat-model" style="font-size: 15px; margin-top: 6px; word-break: break-all; color: var(--accent-hover);">-</div>
               <div class="stat-sub">Standard LLM Provider</div>
             </div>
           </div>
@@ -867,8 +1472,9 @@
               <span>Schnell-Konfiguration Presets</span>
               <span class="badge badge-green">Standard: opencode_optimal_general</span>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-              <button class="btn btn-primary btn-sm" onclick="applyPreset('optimal')">⚙️ opencode_optimal_general (Standard)</button>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Wähle ein vorkonfiguriertes Set an Plugins, Skills, MCP und Language Servern für deinen spezifischen Anwendungsfall:</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm" onclick="applyPreset('optimal')">⚙️ Optimal General (Standard)</button>
               <button class="btn btn-secondary btn-sm" onclick="applyPreset('web')">⚡ Fullstack Web Preset</button>
               <button class="btn btn-secondary btn-sm" onclick="applyPreset('python')">🐍 Data Science & Python</button>
               <button class="btn btn-secondary btn-sm" onclick="applyPreset('agent')">🤖 Autonome Agenten Direktive</button>
@@ -877,7 +1483,7 @@
           </div>
         </div>
 
-        <!-- TAB 4: INTEGRATIONEN (MCP & LSP) -->
+        <!-- TAB 2: INTEGRATIONEN (MCP & LSP) -->
         <div id="tab-integrationen" class="tab-section">
           <div class="section-header">
             <div>
@@ -897,21 +1503,28 @@
             <div class="sub-tab" id="subtab-integ-lsp" onclick="setIntegrationSubTab('lsp')">LSP Server (<span id="selected-lsp-count">0</span>)</div>
           </div>
 
-          <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-            <input type="text" id="integ-search" class="input-field" style="flex: 1;" placeholder="Suche nach Integrationen..." oninput="renderIntegrations()">
+          <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+            <div class="search-wrapper" style="flex: 1; min-width: 200px;">
+              <input type="text" id="integ-search" class="input-field" style="width: 100%;" placeholder="Suche nach Integrationen..." oninput="renderIntegrations()">
+              <button class="search-clear-btn" id="integ-search-clear" onclick="clearIntegSearch()">✕</button>
+            </div>
             <select class="select-field" id="integ-category" onchange="renderIntegrations()">
               <option value="">Alle Kategorien</option>
-              <option value="Developer Tools">Developer Tools</option>
-              <option value="Browser Automation">Browser Automation</option>
-              <option value="Database">Database</option>
-              <option value="Cloud & Infrastructure">Cloud & Infrastructure</option>
+              <option value="browser">Browser Automation</option>
+              <option value="database">Database</option>
+              <option value="development">Development</option>
+              <option value="filesystem">Filesystem</option>
+              <option value="web">Web & Search</option>
+              <option value="ai">AI Reasoning</option>
+              <option value="cloud">Cloud & Workspace</option>
             </select>
           </div>
 
+          <div id="integ-status-count" style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;"></div>
           <div class="item-grid" id="integrations-grid"></div>
         </div>
 
-        <!-- TAB 5: PLUGINS & SKILLS -->
+        <!-- TAB 3: PLUGINS & SKILLS -->
         <div id="tab-erweiterungen" class="tab-section">
           <div class="section-header">
             <div>
@@ -931,12 +1544,16 @@
             <div class="sub-tab" id="subtab-erw-skills" onclick="setErweiterungenSubTab('skills')">Skills (<span id="selected-skills-count">0</span>)</div>
           </div>
 
-          <input type="text" id="erw-search" class="input-field" style="width: 100%; margin-bottom: 16px;" placeholder="Suche nach Plugins oder Skills..." oninput="renderErweiterungen()">
+          <div class="search-wrapper" style="margin-bottom: 16px;">
+            <input type="text" id="erw-search" class="input-field" style="width: 100%;" placeholder="Suche nach Plugins oder Skills..." oninput="renderErweiterungen()">
+            <button class="search-clear-btn" id="erw-search-clear" onclick="clearErwSearch()">✕</button>
+          </div>
 
+          <div id="erw-status-count" style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;"></div>
           <div class="item-grid" id="erweiterungen-grid"></div>
         </div>
 
-        <!-- TAB 6: KI-MODELLE & PROVIDER -->
+        <!-- TAB 4: KI-MODELLE & PROVIDER -->
         <div id="tab-provider" class="tab-section">
           <div class="section-header">
             <div>
@@ -945,8 +1562,11 @@
             </div>
           </div>
 
-          <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-            <input type="text" id="model-search" class="input-field" style="flex: 1;" placeholder="Suche nach Modell-Name oder ID..." oninput="renderProviders()">
+          <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+            <div class="search-wrapper" style="flex: 1; min-width: 200px;">
+              <input type="text" id="model-search" class="input-field" style="width: 100%;" placeholder="Suche nach Modell-Name oder ID..." oninput="renderProviders()">
+              <button class="search-clear-btn" id="model-search-clear" onclick="clearModelSearch()">✕</button>
+            </div>
             <select class="select-field" id="provider-filter" onchange="renderProviders()">
               <option value="">Alle Provider</option>
             </select>
@@ -955,14 +1575,18 @@
           <div id="providers-list" style="display: flex; flex-direction: column; gap: 16px;"></div>
         </div>
 
-        <!-- TAB 7: CONFIG & INI REGISTER -->
+        <!-- TAB 5: CONFIG & JSON EDITOR -->
         <div id="tab-config" class="tab-section">
           <div class="section-header">
             <div>
               <div class="section-title">opencode.json Editor</div>
-              <div class="section-subtitle">Direkte Bearbeitung der opencode.json Konfigurationsdatei</div>
+              <div class="section-subtitle">Direkte Bearbeitung und Validierung der Konfigurationsdatei</div>
             </div>
-            <div class="header-actions">
+            <div class="header-actions" style="display: flex; align-items: center; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); cursor: pointer; margin-right: 8px;">
+                <input type="checkbox" id="auto-save-toggle" onchange="toggleAutoSave()"> Auto-Save
+              </label>
+              <button class="btn btn-secondary btn-sm" onclick="resetConfigToDefaults()">🔄 Standard</button>
               <button class="btn btn-secondary btn-sm" onclick="prettifyConfigJson()">✨ Formatieren</button>
               <button class="btn btn-secondary btn-sm" onclick="copyConfigJson()">📋 Kopieren</button>
               <button class="btn btn-secondary btn-sm" onclick="validateConfigJson()">🔍 JSON Prüfen</button>
@@ -970,32 +1594,83 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="card">
+          <div class="editor-split-view" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="card" style="display: flex; flex-direction: column;">
               <div class="card-title">
                 <span>Live Editor (opencode.json)</span>
-                <span id="json-syntax-status" class="badge badge-green">Valid JSON</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span id="json-editor-meta" style="font-size: 11px; color: var(--text-dim); font-family: monospace;"></span>
+                  <span id="json-syntax-status" class="badge badge-green">Valid JSON</span>
+                </div>
               </div>
-              <textarea id="config-editor" class="input-field" style="width: 100%; height: 420px; font-family: 'JetBrains Mono', monospace;" spellcheck="false" oninput="onConfigEditorInput()"></textarea>
+
+              <!-- CODE EDITOR WITH REAL-TIME SYNTAX HIGHLIGHTER & GUTTER -->
+              <div class="code-editor-container" id="code-editor-container">
+                <div class="editor-gutter" id="editor-gutter">
+                  <div class="gutter-line"><span>1</span></div>
+                </div>
+                <div class="editor-stage-wrap">
+                  <div class="editor-backdrop" id="editor-backdrop">
+                    <div class="editor-highlights" id="editor-highlights" aria-hidden="true"></div>
+                  </div>
+                  <textarea id="config-editor" class="editor-textarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" oninput="onConfigEditorInput()" onscroll="onConfigEditorScroll()" onmousemove="onConfigEditorMouseMove(event)" onmouseleave="hideErrorTooltip()" onkeydown="handleEditorKeyDown(event)"></textarea>
+                </div>
+              </div>
+
+              <!-- REAL-TIME SYNTAX ERROR BANNER -->
+              <div class="json-error-banner" id="json-error-banner">
+                <div style="display: flex; align-items: center; gap: 8px; color: #f43f5e;">
+                  <span>⚠️</span>
+                  <span id="json-error-banner-msg">Syntaxfehler</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-secondary btn-sm" style="height: 26px; padding: 0 8px; font-size: 11px; border-color: rgba(244, 63, 94, 0.4); color: #fecdd3;" onclick="jumpToErrorLine()">👉 Zum Fehler</button>
+                  <button class="btn btn-secondary btn-sm" style="height: 26px; padding: 0 8px; font-size: 11px;" onclick="prettifyConfigJson()">Auto-Fix Format</button>
+                </div>
+              </div>
             </div>
+
             <div class="card">
-              <div class="card-title">Vorschau & Status</div>
-              <pre id="config-preview-panel" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); overflow: auto; height: 420px; background: rgba(11, 13, 19, 0.9); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);"></pre>
+              <div class="card-title">
+                <span>Vorschau & Schema-Inspektor</span>
+                <span id="preview-badge-status" class="badge badge-blue">Kompiliert</span>
+              </div>
+              <pre id="config-preview-panel" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-muted); overflow: auto; height: 440px; background: rgba(8, 10, 15, 0.95); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); line-height: 20px; box-sizing: border-box;"></pre>
             </div>
+          </div>
+
+          <!-- FLOATING HOVER ERROR TOOLTIP -->
+          <div class="json-error-tooltip" id="json-error-tooltip">
+            <div class="tooltip-header">
+              <div class="tooltip-title">
+                <span style="font-size: 14px;">⚠️</span>
+                <span id="tooltip-title">JSON Syntaxfehler</span>
+              </div>
+              <span class="tooltip-badge" id="tooltip-badge">Zeile 1, Spalte 1</span>
+            </div>
+            <div class="tooltip-msg" id="tooltip-msg"></div>
+            <div class="tooltip-suggestion" id="tooltip-suggestion"></div>
+            <div class="tooltip-preview" id="tooltip-preview"></div>
           </div>
         </div>
 
-        <!-- TAB 8: THEMES & VISUALS -->
+        <!-- TAB 6: THEMES & VISUALS -->
         <div id="tab-design" class="tab-section">
           <div class="section-header">
             <div>
               <div class="section-title">Themes & Visuelle Style-Palette</div>
               <div class="section-subtitle">Passe das Erscheinungsbild deines OpenCode Studios an</div>
             </div>
+            <div class="header-actions">
+              <button class="btn btn-secondary btn-sm" onclick="resetThemeToDefault()">🔄 Theme Zurücksetzen</button>
+            </div>
           </div>
 
-          <div style="display: flex; gap: 10px; margin-bottom: 16px; align-items: center;">
-            <input type="text" id="theme-search-input" class="input-field" style="flex: 1;" placeholder="Theme suchen..." oninput="filterThemes()">
+          <div style="display: flex; gap: 10px; margin-bottom: 16px; align-items: center; flex-wrap: wrap;">
+            <div class="search-wrapper" style="flex: 1; min-width: 200px;">
+              <input type="text" id="theme-search-input" class="input-field" style="width: 100%;" placeholder="Theme suchen..." oninput="filterThemes()">
+              <button class="search-clear-btn" id="theme-search-clear" onclick="clearThemeSearch()">✕</button>
+            </div>
             <select class="select-field" id="theme-category" onchange="filterThemes()">
               <option value="all">Alle Kategorien</option>
               <option value="dark">Dark Themes</option>
@@ -1009,12 +1684,12 @@
           <div class="themes-grid" id="themes-grid"></div>
         </div>
 
-        <!-- TAB 9: SYSTEM & DEPLOYMENT -->
+        <!-- TAB 7: SYSTEM & RUNTIME -->
         <div id="tab-system" class="tab-section">
           <div class="section-header">
             <div>
               <div class="section-title">System & Deployment Informationen</div>
-              <div class="section-subtitle">Runtime Architecture, Cloud Run Container Telemetry & Standalone Build Engine</div>
+              <div class="section-subtitle">Runtime Architecture, Cloud Run Telemetry & OpenCode CLI Management</div>
             </div>
             <div class="header-actions">
               <button class="btn btn-secondary btn-sm" onclick="loadSystemInfo()">🔄 Telemetrie Aktualisieren</button>
@@ -1040,7 +1715,7 @@
               <div style="font-size: 13px; font-weight: 700; margin: 6px 0;" id="sys-target-mode">
                 <span class="badge badge-gold" id="sys-build-badge">Master Builder Build</span>
               </div>
-              <div style="font-size: 11px; color: var(--text-muted);" id="sys-build-sub">1-Klick Standalone Generator Aktiv</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="sys-build-sub">Tweaker Engine Aktiv</div>
             </div>
           </div>
 
@@ -1067,7 +1742,7 @@
               <div class="card-title">System Pfade & Auth</div>
               <div style="font-size: 11px; color: var(--text-muted); line-height: 1.8;">
                 <div>Version: <span id="sys-version" style="color: var(--text-main); font-weight: 600;">v1.18.5</span></div>
-                <div>Config Pfad: <span id="sys-path" style="color: var(--text-main); font-family: monospace;">~/.config/opencode/opencode.json</span></div>
+                <div>Config Pfad: <span id="sys-path" style="color: var(--text-main); font-family: monospace;">opencode.json</span></div>
                 <div>Auth Provider: <span id="sys-auth-providers" style="color: var(--text-main);">Anthropic, OpenAI, Google, DeepSeek, Ollama, Mistral AI</span></div>
               </div>
             </div>
@@ -1079,7 +1754,52 @@
 
   <div id="notification-area"></div>
 
+  <!-- AI MODAL -->
+  <div class="modal-overlay" id="ai-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+          AI Check & Auto-Fix
+        </div>
+        <button class="modal-close-icon" onclick="closeAiModal()" title="Schließen">✕</button>
+      </div>
+      <div class="modal-body" id="ai-log-container">
+        <!-- Logs go here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="copyAiLogs()" id="ai-modal-copy-btn">📋 Logs Kopieren</button>
+        <button class="btn btn-primary" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE (CTRL+K) -->
+  <div class="cmd-palette-overlay" id="cmd-palette-overlay" onclick="handlePaletteOverlayClick(event)">
+    <div class="cmd-palette-modal" id="cmd-palette-modal">
+      <div class="cmd-input-wrapper">
+        <div class="cmd-input-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <input type="text" class="cmd-search-input" id="cmd-palette-input" placeholder="Befehl oder Tab suchen (z.B. 'Save', 'Format', 'Model', 'Theme')..." autocomplete="off" spellcheck="false" oninput="onCommandPaletteInput(event)" onkeydown="onCommandPaletteKeyDown(event)">
+        <span class="cmd-shortcut-tag">ESC to close</span>
+      </div>
+      <div class="cmd-results-list" id="cmd-results-list">
+        <!-- Dynamic command and navigation entries -->
+      </div>
+      <div class="cmd-footer">
+        <div class="cmd-footer-keys">
+          <span class="cmd-footer-key"><kbd>↑</kbd><kbd>↓</kbd> Navigieren</span>
+          <span class="cmd-footer-key"><kbd>↵</kbd> Ausführen</span>
+          <span class="cmd-footer-key"><kbd>ESC</kbd> Schließen</span>
+        </div>
+        <div style="color: var(--accent-hover); font-weight: 600;">OpenCode Tweaker v2.1</div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // GLOBAL STATE
     let currentConfig = {};
     let allPlugins = [];
     let allMCP = [];
@@ -1096,19 +1816,69 @@
 
     let activeIntegSubTab = 'all';
     let activeErwSubTab = 'all';
-
-    // SLEEK PARTICLES CANVAS
     let activeWallpaper = 'matrix'; // 'matrix', 'pcb', 'off'
-
     let matrixAnimId = null;
+    let autoSaveInterval = null;
 
+    // KEYBOARD SHORTCUTS
+    document.addEventListener('keydown', (e) => {
+      // Command Palette (Ctrl+K or Cmd+K)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        toggleCommandPalette();
+        return;
+      }
+
+      // Save shortcut (Ctrl+S or Cmd+S)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        const activeTab = document.querySelector('.tab-section.active');
+        if (activeTab && activeTab.id === 'tab-config') {
+          saveRawConfigEditor();
+        } else {
+          saveConfig();
+        }
+        return;
+      }
+
+      // Escape shortcut to close modals
+      if (e.key === 'Escape') {
+        const cmdPalette = document.getElementById('cmd-palette-overlay');
+        if (cmdPalette && cmdPalette.style.display === 'flex') {
+          closeCommandPalette();
+          return;
+        }
+
+        const modal = document.getElementById('ai-modal');
+        if (modal && modal.style.display === 'flex') {
+          closeAiModal();
+          return;
+        }
+      }
+    });
+
+    // PAGE VISIBILITY (BATTERY & CPU OPTIMIZATION)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (matrixAnimId) {
+          cancelAnimationFrame(matrixAnimId);
+          matrixAnimId = null;
+        }
+      } else {
+        if (activeWallpaper === 'matrix') {
+          initMatrixRainCanvas();
+        }
+      }
+    });
+
+    // MATRIX RAIN CANVAS
     function initMatrixRainCanvas() {
       const canvas = document.getElementById('matrix-rain');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
-      const MATRIX_CHARS = ' eagle ⚔ ✚ 0123456789ABCDEFGHJKLMNPQRSTUVWXYZアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-      const fontSize = 18;
+      const MATRIX_CHARS = ' 0123456789ABCDEFGHJKLMNPQRSTUVWXYZアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+      const fontSize = 16;
       let drops = [];
       let cols = 0;
 
@@ -1130,10 +1900,8 @@
       function drawMatrix() {
         if (activeWallpaper !== 'matrix') return;
 
-        // Fast hardware-accelerated trail fade (NO heavy clearRect or shadowBlur)
         ctx.fillStyle = 'rgba(7, 8, 11, 0.08)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.font = 'bold ' + fontSize + 'px "JetBrains Mono", monospace';
 
         for (let i = 0; i < cols; i++) {
@@ -1141,12 +1909,10 @@
           const y = drops[i] * fontSize;
 
           if (y > 0) {
-            // Trail follower character (Brilliant Electric Crimson Red)
-            ctx.fillStyle = Math.random() > 0.25 ? '#ff1744' : '#ef4444';
+            ctx.fillStyle = Math.random() > 0.2 ? '#3b82f6' : '#60a5fa';
             const trailChar = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
             ctx.fillText(trailChar, x, y - fontSize);
 
-            // Leading head character (Ultra-Bright Glowing White Core)
             ctx.fillStyle = '#ffffff';
             const headChar = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
             ctx.fillText(headChar, x, y);
@@ -1173,21 +1939,22 @@
         activeWallpaper = 'pcb';
         if (matrixCanvas) matrixCanvas.style.display = 'none';
         if (pcbCanvas) pcbCanvas.style.display = 'block';
-        if (btn) btn.textContent = '⚡ Wallpaper: PCB Neural';
-        showToast('Wallpaper: PCB Neural Network aktiviert', 'success');
+        if (btn) btn.textContent = '⚡ Wallpaper: Neural';
+        initPcbCanvas();
+        showToast('Wallpaper: Neural Network aktiviert', 'info');
       } else if (activeWallpaper === 'pcb') {
         activeWallpaper = 'off';
         if (matrixCanvas) matrixCanvas.style.display = 'none';
         if (pcbCanvas) pcbCanvas.style.display = 'none';
-        if (btn) btn.textContent = '⬛ Wallpaper: Off';
-        showToast('Wallpaper deaktiviert', 'warning');
+        if (btn) btn.textContent = '⬛ Wallpaper: Aus';
+        showToast('Wallpaper deaktiviert (Minimaler Modus)', 'warning');
       } else {
         activeWallpaper = 'matrix';
         if (matrixCanvas) matrixCanvas.style.display = 'block';
         if (pcbCanvas) pcbCanvas.style.display = 'none';
         if (btn) btn.textContent = '🌧 Wallpaper: Matrix';
         initMatrixRainCanvas();
-        showToast('Wallpaper: Matrix Rain (Tweaker Crimson) aktiviert', 'success');
+        showToast('Wallpaper: Matrix Rain aktiviert', 'success');
       }
     }
 
@@ -1207,7 +1974,7 @@
       window.addEventListener('resize', handleResize);
 
       const particles = [];
-      const particleCount = Math.min(50, Math.floor((width * height) / 25000));
+      const particleCount = Math.min(45, Math.floor((width * height) / 28000));
 
       function initParticles() {
         particles.length = 0;
@@ -1246,11 +2013,11 @@
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < 120) {
-              const lineAlpha = (1 - dist / 120) * 0.15;
+              const lineAlpha = (1 - dist / 120) * 0.2;
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(220, 38, 38, ${lineAlpha})`;
+              ctx.strokeStyle = `rgba(59, 130, 246, ${lineAlpha})`;
               ctx.lineWidth = 0.8;
               ctx.stroke();
             }
@@ -1258,7 +2025,7 @@
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(239, 68, 68, ${p.alpha})`;
+          ctx.fillStyle = `rgba(96, 165, 250, ${p.alpha})`;
           ctx.fill();
         }
 
@@ -1268,10 +2035,9 @@
       draw();
     }
 
-    // INITIALIZATION
+    // INITIALIZATION LIFECYCLE
     document.addEventListener('DOMContentLoaded', async () => {
       initMatrixRainCanvas();
-      initPcbCanvas();
       await loadAllData();
       await checkOpencodeStatus();
       setInterval(checkOpencodeStatus, 10000);
@@ -1316,43 +2082,8 @@
         const res = await fetch('/api/config');
         currentConfig = await res.json();
 
-        document.getElementById('config-editor').value = JSON.stringify(currentConfig, null, 2);
-        document.getElementById('config-preview-panel').textContent = JSON.stringify(currentConfig, null, 2);
-
-        // Restore Plugins
-        if (Array.isArray(currentConfig.plugin)) {
-          selectedPlugins = currentConfig.plugin.map(p => typeof p === 'string' ? p : p[0]);
-        } else {
-          selectedPlugins = [];
-        }
-
-        // Restore MCP
-        if (currentConfig.mcp && typeof currentConfig.mcp === 'object') {
-          selectedMCP = Object.keys(currentConfig.mcp).map(key => ({
-            id: key,
-            ...currentConfig.mcp[key]
-          }));
-        } else {
-          selectedMCP = [];
-        }
-
-        // Restore Skills
-        if (currentConfig.skills && Array.isArray(currentConfig.skills.paths)) {
-          selectedSkills = currentConfig.skills.paths.map(p => {
-            const matched = allSkills.find(s => s.path === p);
-            return matched ? matched.id : p.split('/').pop();
-          });
-        } else {
-          selectedSkills = [];
-        }
-
-        // Restore LSP
-        if (currentConfig.lsp && typeof currentConfig.lsp === 'object') {
-          selectedLSP = Object.keys(currentConfig.lsp).filter(key => !currentConfig.lsp[key].disabled);
-        } else {
-          selectedLSP = [];
-        }
-
+        syncStateFromConfig();
+        updateEditorTextareas();
         updateDashboard();
         renderIntegrations();
         renderErweiterungen();
@@ -1362,6 +2093,59 @@
       } catch (err) {
         showToast('Fehler beim Abrufen der Konfiguration', 'error');
       }
+    }
+
+    function syncStateFromConfig() {
+      // Restore Plugins
+      if (Array.isArray(currentConfig.plugin)) {
+        selectedPlugins = currentConfig.plugin.map(p => typeof p === 'string' ? p : p[0]);
+      } else {
+        selectedPlugins = [];
+      }
+
+      // Restore MCP
+      if (currentConfig.mcp && typeof currentConfig.mcp === 'object') {
+        selectedMCP = Object.keys(currentConfig.mcp).map(key => ({
+          id: key,
+          ...currentConfig.mcp[key]
+        }));
+      } else {
+        selectedMCP = [];
+      }
+
+      // Restore Skills
+      if (currentConfig.skills && Array.isArray(currentConfig.skills.paths)) {
+        selectedSkills = currentConfig.skills.paths.map(p => {
+          const matched = allSkills.find(s => s.path === p);
+          return matched ? matched.id : p.split('/').pop();
+        });
+      } else {
+        selectedSkills = [];
+      }
+
+      // Restore LSP
+      if (currentConfig.lsp && typeof currentConfig.lsp === 'object') {
+        selectedLSP = Object.keys(currentConfig.lsp).filter(key => !currentConfig.lsp[key].disabled);
+      } else {
+        selectedLSP = [];
+      }
+    }
+
+    function updateEditorTextareas() {
+      const jsonStr = JSON.stringify(currentConfig, null, 2);
+      const ed = document.getElementById('config-editor');
+      const pr = document.getElementById('config-preview-panel');
+      if (ed) ed.value = jsonStr;
+      if (pr) pr.textContent = jsonStr;
+
+      const metaEl = document.getElementById('json-editor-meta');
+      if (metaEl) {
+        const lines = jsonStr.split('\n').length;
+        metaEl.textContent = `${lines} Zeilen | ${jsonStr.length} Bytes`;
+      }
+      
+      // Update real-time syntax highlighter
+      onConfigEditorInput();
     }
 
     // TAB SWITCHING
@@ -1386,6 +2170,12 @@
       if (elLsp) elLsp.textContent = selectedLSP.length;
       const elModel = document.getElementById('stat-model');
       if (elModel) elModel.textContent = currentConfig.model || 'Kein Modell';
+
+      // Update sidebar counts
+      const sbPlugins = document.getElementById('sidebar-plugins-badge');
+      if (sbPlugins) sbPlugins.textContent = selectedPlugins.length + selectedSkills.length;
+      const sbMcplsp = document.getElementById('sidebar-mcplsp-badge');
+      if (sbMcplsp) sbMcplsp.textContent = selectedMCP.length + selectedLSP.length;
     }
 
     // INTEGRATIONS (MCP + LSP)
@@ -1397,6 +2187,14 @@
       renderIntegrations();
     }
 
+    function clearIntegSearch() {
+      const el = document.getElementById('integ-search');
+      if (el) el.value = '';
+      const clr = document.getElementById('integ-search-clear');
+      if (clr) clr.style.display = 'none';
+      renderIntegrations();
+    }
+
     function renderIntegrations() {
       const grid = document.getElementById('integrations-grid');
       if (!grid) return;
@@ -1404,8 +2202,11 @@
 
       const searchEl = document.getElementById('integ-search');
       const catEl = document.getElementById('integ-category');
+      const clr = document.getElementById('integ-search-clear');
       const query = searchEl ? (searchEl.value || '').toLowerCase() : '';
       const cat = catEl ? catEl.value : '';
+
+      if (clr) clr.style.display = query ? 'block' : 'none';
 
       let items = [];
 
@@ -1419,15 +2220,24 @@
 
       if (activeIntegSubTab === 'all' || activeIntegSubTab === 'lsp') {
         allLSP.forEach(l => {
-          items.push({ ...l, itemType: 'lsp', description: `LSP Language Server für ${l.extensions ? l.extensions.join(', ') : 'Dateien'}` });
+          if (!cat || cat === 'development') {
+            items.push({ ...l, itemType: 'lsp', description: `LSP Language Server für ${l.extensions ? l.extensions.join(', ') : 'Dateien'}` });
+          }
         });
       }
+
+      const totalCount = items.length;
 
       items = items.filter(i => {
         return (i.name || '').toLowerCase().includes(query) ||
                (i.description || '').toLowerCase().includes(query) ||
                (i.id || '').toLowerCase().includes(query);
       });
+
+      const countStatus = document.getElementById('integ-status-count');
+      if (countStatus) {
+        countStatus.textContent = `Zeige ${items.length} von ${totalCount} Integrationen (${selectedMCP.length} MCP, ${selectedLSP.length} LSP aktiv)`;
+      }
 
       items.forEach(item => {
         const card = document.createElement('div');
@@ -1443,14 +2253,14 @@
 
         card.innerHTML = `
           <div class="item-header">
-            <div class="item-title">${item.name || item.id}</div>
+            <div class="item-title">${escapeHtml(item.name || item.id)}</div>
             <span class="badge ${item.itemType === 'mcp' ? 'badge-blue' : 'badge-green'}">
               ${item.itemType.toUpperCase()}
             </span>
           </div>
-          <div class="item-desc">${item.description || 'Keine Beschreibung vorhanden.'}</div>
+          <div class="item-desc">${escapeHtml(item.description || 'Keine Beschreibung vorhanden.')}</div>
           <div class="item-footer">
-            <div style="display: flex; gap: 4px;">
+            <div style="display: flex; gap: 4px; align-items: center;">
               ${item.popular ? '<span class="badge badge-gold">Beliebt</span>' : ''}
               ${item.category ? `<span class="tag-pill">${item.category}</span>` : ''}
             </div>
@@ -1507,6 +2317,7 @@
         });
       }
 
+      updateEditorTextareas();
       updateDashboard();
       renderIntegrations();
     }
@@ -1533,9 +2344,13 @@
           if (!selectedLSP.includes(item.id)) selectedLSP.push(item.id);
         });
         currentConfig.lsp = {};
-        selectedLSP.forEach(id => { currentConfig.lsp[id] = { command: [id], disabled: false }; });
+        selectedLSP.forEach(id => {
+          const lspObj = allLSP.find(l => l.id === id);
+          currentConfig.lsp[id] = { command: lspObj?.command || [id], extensions: lspObj?.extensions || [], disabled: false };
+        });
       }
 
+      updateEditorTextareas();
       updateDashboard();
       renderIntegrations();
     }
@@ -1549,6 +2364,7 @@
         selectedLSP = [];
         currentConfig.lsp = {};
       }
+      updateEditorTextareas();
       updateDashboard();
       renderIntegrations();
     }
@@ -1562,13 +2378,25 @@
       renderErweiterungen();
     }
 
+    function clearErwSearch() {
+      const el = document.getElementById('erw-search');
+      if (el) el.value = '';
+      const clr = document.getElementById('erw-search-clear');
+      if (clr) clr.style.display = 'none';
+      renderErweiterungen();
+    }
+
     function renderErweiterungen() {
       const grid = document.getElementById('erweiterungen-grid');
       if (!grid) return;
       grid.innerHTML = '';
 
       const searchEl = document.getElementById('erw-search');
+      const clr = document.getElementById('erw-search-clear');
       const query = searchEl ? (searchEl.value || '').toLowerCase() : '';
+
+      if (clr) clr.style.display = query ? 'block' : 'none';
+
       let items = [];
 
       if (activeErwSubTab === 'all' || activeErwSubTab === 'plugins') {
@@ -1579,11 +2407,18 @@
         allSkills.forEach(s => items.push({ ...s, itemType: 'skill' }));
       }
 
+      const totalCount = items.length;
+
       items = items.filter(i => {
         return (i.name || '').toLowerCase().includes(query) ||
                (i.description || '').toLowerCase().includes(query) ||
                (i.id || '').toLowerCase().includes(query);
       });
+
+      const countStatus = document.getElementById('erw-status-count');
+      if (countStatus) {
+        countStatus.textContent = `Zeige ${items.length} von ${totalCount} Erweiterungen (${selectedPlugins.length} Plugins, ${selectedSkills.length} Skills aktiv)`;
+      }
 
       items.forEach(item => {
         const card = document.createElement('div');
@@ -1599,12 +2434,12 @@
 
         card.innerHTML = `
           <div class="item-header">
-            <div class="item-title">${item.name || item.id}</div>
+            <div class="item-title">${escapeHtml(item.name || item.id)}</div>
             <span class="badge ${item.itemType === 'plugin' ? 'badge-blue' : 'badge-green'}">
               ${item.itemType.toUpperCase()}
             </span>
           </div>
-          <div class="item-desc">${item.description || 'Keine Beschreibung vorhanden.'}</div>
+          <div class="item-desc">${escapeHtml(item.description || 'Keine Beschreibung vorhanden.')}</div>
           <div class="item-footer">
             <div class="tag-pill">${item.category || 'Extension'}</div>
             <div class="tag-pill">${item.id}</div>
@@ -1633,10 +2468,11 @@
         currentConfig.skills = currentConfig.skills || { paths: [], urls: [] };
         currentConfig.skills.paths = selectedSkills.map(id => {
           const matched = allSkills.find(s => s.id === id);
-          return matched?.path || `~/.config/opencode/skill/${id}`;
+          return matched?.path || `https://github.com/OpenCode-Tweaker/skills/${id}`;
         });
       }
 
+      updateEditorTextareas();
       updateDashboard();
       renderErweiterungen();
     }
@@ -1653,6 +2489,7 @@
           urls: []
         };
       }
+      updateEditorTextareas();
       updateDashboard();
       renderErweiterungen();
     }
@@ -1666,17 +2503,29 @@
         selectedSkills = [];
         currentConfig.skills = { paths: [], urls: [] };
       }
+      updateEditorTextareas();
       updateDashboard();
       renderErweiterungen();
     }
 
     // PROVIDERS & MODELS
+    function clearModelSearch() {
+      const el = document.getElementById('model-search');
+      if (el) el.value = '';
+      const clr = document.getElementById('model-search-clear');
+      if (clr) clr.style.display = 'none';
+      renderProviders();
+    }
+
     function renderProviders() {
       const container = document.getElementById('providers-list');
       if (!container) return;
       const filterSelect = document.getElementById('provider-filter');
       const searchEl = document.getElementById('model-search');
+      const clr = document.getElementById('model-search-clear');
       const searchQuery = searchEl ? (searchEl.value || '').toLowerCase() : '';
+
+      if (clr) clr.style.display = searchQuery ? 'block' : 'none';
 
       container.innerHTML = '';
 
@@ -1710,14 +2559,15 @@
           const isCurrent = currentConfig.model === modelFullId;
 
           modelsHtml += `
-            <div style="padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(11, 13, 19, 0.8); margin-top: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid ${isCurrent ? 'var(--emerald)' : 'var(--border)'};">
+            <div style="padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(11, 13, 19, 0.85); margin-top: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid ${isCurrent ? 'var(--emerald)' : 'var(--border)'}; flex-wrap: wrap; gap: 8px;">
               <div>
                 <label style="font-weight: 600; font-size: 13px; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                   <input type="radio" name="selected_model" ${isCurrent ? 'checked' : ''} onchange="selectModel('${modelFullId}')">
-                  ${m.name} <span style="font-size: 11px; color: var(--text-muted); font-family: monospace;">(${m.id})</span>
+                  ${escapeHtml(m.name)} <span style="font-size: 11px; color: var(--text-muted); font-family: monospace;">(${m.id})</span>
                 </label>
               </div>
-              <div style="display: flex; gap: 6px;">
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <span class="tag-pill">${(m.context / 1000).toFixed(0)}k Context</span>
                 ${m.reasoning ? '<span class="badge badge-gold">Reasoning</span>' : ''}
                 ${m.tool_call ? '<span class="badge badge-blue">Tools</span>' : ''}
                 ${m.free ? '<span class="badge badge-green">Free</span>' : ''}
@@ -1728,7 +2578,7 @@
 
         pCard.innerHTML = `
           <div class="card-title">
-            ${provider.name}
+            ${escapeHtml(provider.name)}
             ${provider.recommended ? '<span class="badge badge-gold">Empfohlen</span>' : ''}
           </div>
           ${modelsHtml}
@@ -1740,34 +2590,76 @@
 
     function selectModel(modelFullId) {
       currentConfig.model = modelFullId;
+      updateEditorTextareas();
       updateDashboard();
       renderProviders();
       showToast(`Haupt-Modell geändert: ${modelFullId}`, 'success');
     }
 
-    // THEMES
+    // THEMES COMPONENT
+    function clearThemeSearch() {
+      const el = document.getElementById('theme-search-input');
+      if (el) el.value = '';
+      const clr = document.getElementById('theme-search-clear');
+      if (clr) clr.style.display = 'none';
+      filterThemes();
+    }
+
+    function renderThemeCard(t, isCurrent) {
+      const card = document.createElement('div');
+      card.className = `theme-card ${isCurrent ? 'active-theme' : ''}`;
+      card.onclick = () => selectTheme(t.id);
+
+      const colorBars = (t.colors || ['#090a0f', '#3b82f6', '#10b981']).map(c => `<div style="flex: 1; background: ${c};"></div>`).join('');
+
+      card.innerHTML = `
+        <div class="theme-preview-bar">${colorBars}</div>
+        <div class="theme-body">
+          <div>
+            <div style="font-weight: 600; font-size: 13px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+              <span>${escapeHtml(t.name)}</span>
+              ${isCurrent ? '<span class="badge badge-green" style="font-size: 9px;">Aktiv</span>' : ''}
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">von ${escapeHtml(t.author || 'Community')}</div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 12px;">
+            <button class="btn btn-secondary btn-sm" style="flex: 1; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);" onclick="previewTheme('${t.id}', event)">👁️ Vorschau</button>
+            <button class="btn ${isCurrent ? 'btn-success' : 'btn-primary'} btn-sm" style="flex: 1;" onclick="selectTheme('${t.id}', event)">${isCurrent ? '✓ Aktiv' : 'Wählen'}</button>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
     function renderThemes() {
+      filterThemes();
+    }
+
+    function filterThemes() {
+      const catEl = document.getElementById('theme-category');
+      const cat = catEl ? catEl.value : 'all';
+      const searchEl = document.getElementById('theme-search-input');
+      const clr = document.getElementById('theme-search-clear');
+      const query = searchEl ? (searchEl.value || '').toLowerCase() : '';
+      const popEl = document.getElementById('theme-popular-checkbox');
+      const popOnly = popEl ? popEl.checked : false;
+
+      if (clr) clr.style.display = query ? 'block' : 'none';
+
       const grid = document.getElementById('themes-grid');
       if (!grid) return;
       grid.innerHTML = '';
 
-      allThemes.forEach(t => {
+      const filtered = allThemes.filter(t => {
+        const matchesCat = cat === 'all' || t.category === cat;
+        const matchesQuery = (t.name || '').toLowerCase().includes(query) || (t.id || '').toLowerCase().includes(query);
+        const matchesPop = !popOnly || t.popular;
+        return matchesCat && matchesQuery && matchesPop;
+      });
+
+      filtered.forEach(t => {
         const isCurrent = currentConfig.theme === t.id;
-        const card = document.createElement('div');
-        card.className = `theme-card ${isCurrent ? 'active-theme' : ''}`;
-        card.onclick = () => selectTheme(t.id);
-
-        const colorBars = (t.colors || ['#090a0f', '#f43f5e', '#10b981']).map(c => `<div style="flex: 1; background: ${c};"></div>`).join('');
-
-        card.innerHTML = `
-          <div class="theme-preview-bar">${colorBars}</div>
-          <div class="theme-body">
-            <div style="font-weight: 600; font-size: 13px; color: #fff;">${t.name}</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">von ${t.author || 'Community'}</div>
-            <button class="btn btn-secondary btn-sm" style="margin-top: 10px; width: 100%; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);" onclick="previewTheme('${t.id}', event)">👁️ Live Preview</button>
-          </div>
-        `;
-        grid.appendChild(card);
+        grid.appendChild(renderThemeCard(t, isCurrent));
       });
     }
 
@@ -1776,8 +2668,7 @@
       const root = document.documentElement.style;
       if (tObj.colors[0]) {
         root.setProperty('--bg', tObj.colors[0]);
-        // Also tweak surface a bit based on bg (not perfect but OK)
-        root.setProperty('--bg-surface', tObj.colors[0]); 
+        root.setProperty('--bg-surface', tObj.colors[0]);
       }
       if (tObj.colors[1]) {
         root.setProperty('--accent', tObj.colors[1]);
@@ -1797,56 +2688,25 @@
       const tObj = allThemes.find(t => t.id === themeId);
       if (tObj) {
         applyThemeColors(tObj);
-        showToast(`Live Preview aktiv: ${tObj.name}`, 'info');
+        showToast(`Live Preview: ${tObj.name}`, 'info');
       }
     }
 
-    function selectTheme(themeId) {
+    function selectTheme(themeId, event) {
+      if (event) event.stopPropagation();
       currentConfig.theme = themeId;
       const tObj = allThemes.find(t => t.id === themeId);
       if (tObj) {
         applyThemeColors(tObj);
       }
+      updateEditorTextareas();
       renderThemes();
-      showToast(`Theme ausgewählt: ${tObj ? tObj.name : themeId}`, 'success');
+      showToast(`Theme aktiviert: ${tObj ? tObj.name : themeId}`, 'success');
     }
 
-    function filterThemes() {
-      const catEl = document.getElementById('theme-category');
-      const cat = catEl ? catEl.value : 'all';
-      const searchEl = document.getElementById('theme-search-input');
-      const query = searchEl ? (searchEl.value || '').toLowerCase() : '';
-      const popEl = document.getElementById('theme-popular-checkbox');
-      const popOnly = popEl ? popEl.checked : false;
-
-      const grid = document.getElementById('themes-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      const filtered = allThemes.filter(t => {
-        const matchesCat = cat === 'all' || t.category === cat;
-        const matchesQuery = (t.name || '').toLowerCase().includes(query) || (t.id || '').toLowerCase().includes(query);
-        const matchesPop = !popOnly || t.popular;
-        return matchesCat && matchesQuery && matchesPop;
-      });
-
-      filtered.forEach(t => {
-        const isCurrent = currentConfig.theme === t.id;
-        const card = document.createElement('div');
-        card.className = `theme-card ${isCurrent ? 'active-theme' : ''}`;
-        card.onclick = () => selectTheme(t.id);
-
-        const colorBars = (t.colors || ['#090a0f', '#f43f5e', '#10b981']).map(c => `<div style="flex: 1; background: ${c};"></div>`).join('');
-
-        card.innerHTML = `
-          <div class="theme-preview-bar">${colorBars}</div>
-          <div class="theme-body">
-            <div style="font-weight: 600; font-size: 13px; color: #fff;">${t.name}</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">von ${t.author || 'Community'}</div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+    function resetThemeToDefault() {
+      selectTheme('tweaker-dark');
+      showToast('Theme auf Tweaker Dark zurückgesetzt', 'info');
     }
 
     // PRESETS
@@ -1854,16 +2714,18 @@
       if (presetType === 'optimal' || presetType === 'opencode_optimal_general') {
         currentConfig.preset = 'opencode_optimal_general';
         selectedPlugins = ['opencode-git', 'opencode-theme', 'opencode-linter', 'opencode-security'];
+        selectedSkills = ['react-patterns', 'prompt-engineering-pro', 'security-audit'];
         selectedMCP = [
           { id: 'filesystem', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-filesystem'], enabled: true },
           { id: 'memory', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-memory'], enabled: true }
         ];
         selectedLSP = ['typescript-language-server', 'pyright'];
         currentConfig.model = 'anthropic/claude-3-7-sonnet';
-        showToast('⚙️ Preset opencode_optimal_general activated!', 'success');
+        showToast('⚙️ Preset opencode_optimal_general aktiviert!', 'success');
       } else if (presetType === 'web') {
         currentConfig.preset = 'web_fullstack';
         selectedPlugins = ['opencode-git', 'opencode-theme', 'opencode-formatter', 'opencode-db-inspector'];
+        selectedSkills = ['react-patterns', 'tailwind-v4', 'graphql-schema'];
         selectedMCP = [
           { id: 'puppeteer', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-puppeteer'], enabled: true },
           { id: 'postgres', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-postgres'], enabled: true }
@@ -1874,6 +2736,7 @@
       } else if (presetType === 'python') {
         currentConfig.preset = 'python_ds';
         selectedPlugins = ['opencode-linter', 'opencode-git', 'opencode-autodoc'];
+        selectedSkills = ['python-fastapi', 'pytorch-pipeline'];
         selectedMCP = [
           { id: 'postgres', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-postgres'], enabled: true },
           { id: 'sqlite', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-sqlite'], enabled: true }
@@ -1884,6 +2747,7 @@
       } else if (presetType === 'agent') {
         currentConfig.preset = 'agent_autonomous';
         selectedPlugins = ['opencode-voice', 'opencode-security', 'opencode-analytics', 'opencode-terminal'];
+        selectedSkills = ['prompt-engineering-pro', 'system-architecture', 'microservices-cqrs'];
         selectedMCP = [
           { id: 'puppeteer', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-puppeteer'], enabled: true },
           { id: 'github', type: 'local', command: ['npx', '-y', '@modelcontextprotocol/server-github'], enabled: true },
@@ -1896,16 +2760,22 @@
       }
 
       currentConfig.plugin = [...selectedPlugins];
+      currentConfig.skills = {
+        paths: selectedSkills.map(id => {
+          const matched = allSkills.find(s => s.id === id);
+          return matched?.path || `https://github.com/OpenCode-Tweaker/skills/${id}`;
+        }),
+        urls: []
+      };
       currentConfig.mcp = {};
       selectedMCP.forEach(m => { currentConfig.mcp[m.id] = m; });
       currentConfig.lsp = {};
-      selectedLSP.forEach(id => { currentConfig.lsp[id] = { command: [id], disabled: false }; });
+      selectedLSP.forEach(id => {
+        const lspObj = allLSP.find(l => l.id === id);
+        currentConfig.lsp[id] = { command: lspObj?.command || [id], extensions: lspObj?.extensions || [], disabled: false };
+      });
 
-      const ed = document.getElementById('config-editor');
-      if (ed) ed.value = JSON.stringify(currentConfig, null, 2);
-      const pr = document.getElementById('config-preview-panel');
-      if (pr) pr.textContent = JSON.stringify(currentConfig, null, 2);
-
+      updateEditorTextareas();
       updateDashboard();
       renderIntegrations();
       renderErweiterungen();
@@ -1914,7 +2784,27 @@
     }
 
     // SAVE & API CALLS
-    async function saveConfig() {
+    function toggleAutoSave() {
+      const toggleEl = document.getElementById('auto-save-toggle');
+      if (toggleEl && toggleEl.checked) {
+        autoSaveInterval = setInterval(() => {
+          try {
+            const rawText = document.getElementById('config-editor').value;
+            JSON.parse(rawText);
+            saveRawConfigEditor(true);
+          } catch(err) {}
+        }, 15000);
+        showToast('Auto-Save aktiviert (alle 15s)', 'success');
+      } else {
+        if (autoSaveInterval) {
+          clearInterval(autoSaveInterval);
+          autoSaveInterval = null;
+        }
+        showToast('Auto-Save deaktiviert', 'info');
+      }
+    }
+
+    async function saveConfig(silent = false) {
       try {
         const res = await fetch('/api/config', {
           method: 'POST',
@@ -1925,67 +2815,506 @@
         if (res.ok) {
           const saved = await res.json();
           currentConfig = saved;
-          document.getElementById('config-editor').value = JSON.stringify(currentConfig, null, 2);
-          showToast('✅ Konfiguration erfolgreich gespeichert!', 'success');
+          syncStateFromConfig();
+          updateEditorTextareas();
+          updateDashboard();
+          
+          if (!silent) {
+            showToast('✅ Konfiguration erfolgreich gespeichert!', 'success');
+          } else {
+            const statusEl = document.getElementById('json-syntax-status');
+            if (statusEl && statusEl.textContent === 'Valid JSON') {
+              statusEl.textContent = 'Auto-Saved';
+              setTimeout(() => { if (statusEl.textContent === 'Auto-Saved') statusEl.textContent = 'Valid JSON'; }, 2000);
+            }
+          }
         } else {
-          showToast('Fehler beim Speichern auf dem Server', 'error');
+          if (!silent) showToast('Fehler beim Speichern auf dem Server', 'error');
         }
       } catch (err) {
-        showToast('Netzwerkfehler beim Speichern', 'error');
+        if (!silent) showToast('Netzwerkfehler beim Speichern', 'error');
       }
     }
 
-    async function saveRawConfigEditor() {
+    async function saveRawConfigEditor(silent = false) {
       try {
         const rawText = document.getElementById('config-editor').value;
         const parsed = JSON.parse(rawText);
         currentConfig = parsed;
-        await saveConfig();
+        syncStateFromConfig();
+        await saveConfig(silent);
+        renderIntegrations();
+        renderErweiterungen();
+        renderProviders();
+        renderThemes();
       } catch (err) {
-        showToast('Ungültiges JSON-Format!', 'error');
+        if (!silent) showToast('Ungültiges JSON-Format!', 'error');
       }
     }
 
-    function validateConfigJson() {
+    async function resetConfigToDefaults() {
       try {
-        const rawText = document.getElementById('config-editor').value;
-        JSON.parse(rawText);
-        const statusEl = document.getElementById('json-syntax-status');
-        if (statusEl) {
-          statusEl.className = 'badge badge-green';
-          statusEl.textContent = 'Valid JSON';
+        const res = await fetch('/api/config/reset', { method: 'POST' });
+        if (res.ok) {
+          currentConfig = await res.json();
+          syncStateFromConfig();
+          updateEditorTextareas();
+          updateDashboard();
+          renderIntegrations();
+          renderErweiterungen();
+          renderProviders();
+          renderThemes();
+          showToast('Konfiguration auf Standardwerte zurückgesetzt', 'success');
         }
-        showToast('Validierung erfolgreich: JSON ist korrekt!', 'success');
-        return true;
       } catch (err) {
-        const statusEl = document.getElementById('json-syntax-status');
-        if (statusEl) {
-          statusEl.className = 'badge badge-red';
-          statusEl.textContent = 'Syntax Error';
+        showToast('Fehler beim Zurücksetzen', 'error');
+      }
+    }
+
+    // ==========================================
+    // REAL-TIME SYNTAX ERROR HIGHLIGHTER & ANALYZER
+    // ==========================================
+    let currentJsonError = null;
+
+    function analyzeJsonSyntax(text) {
+      if (!text || text.trim() === '') {
+        return {
+          valid: false,
+          error: {
+            line: 1,
+            column: 1,
+            startOffset: 0,
+            endOffset: 1,
+            token: '',
+            title: 'Leere Konfiguration',
+            message: 'Die Konfigurationsdatei darf nicht leer sein.',
+            suggestion: 'Füge ein gültiges JSON-Objekt ein oder klicke auf "🔄 Standard".',
+            snippet: '^\n[Leere Eingabe]'
+          }
+        };
+      }
+
+      try {
+        const parsed = JSON.parse(text);
+        return { valid: true, error: null, parsed };
+      } catch (err) {
+        const rawMsg = err.message || 'Syntax Error';
+        let pos = -1;
+        let line = 1;
+        let col = 1;
+
+        // 1. Extract position from V8 / JavaScript engine error message
+        const posMatch = rawMsg.match(/position\s+(\d+)/i);
+        const lineColMatch = rawMsg.match(/line\s+(\d+)\s+column\s+(\d+)/i);
+
+        if (posMatch) {
+          pos = parseInt(posMatch[1], 10);
+        } else if (lineColMatch) {
+          line = parseInt(lineColMatch[1], 10);
+          col = parseInt(lineColMatch[2], 10);
+          const lines = text.split('\n');
+          let offset = 0;
+          for (let i = 0; i < line - 1 && i < lines.length; i++) {
+            offset += lines[i].length + 1;
+          }
+          pos = offset + (col - 1);
         }
-        showToast(`Syntax-Fehler im JSON: ${err.message}`, 'error');
-        return false;
+
+        // 2. Intelligent scanning fallback if pos wasn't parsed
+        if (pos < 0 || isNaN(pos)) {
+          pos = findErrorOffsetByScanning(text);
+        }
+
+        pos = Math.min(Math.max(0, pos), text.length);
+
+        // Compute Line and Column from offset
+        const textBeforePos = text.slice(0, pos);
+        const splitLines = textBeforePos.split('\n');
+        line = splitLines.length;
+        col = splitLines[splitLines.length - 1].length + 1;
+
+        // Determine token startOffset and endOffset for red wavy underline
+        let startOffset = pos;
+        let endOffset = pos + 1;
+
+        if (pos >= text.length) {
+          startOffset = Math.max(0, text.length - 1);
+          endOffset = text.length;
+        } else {
+          const ch = text[pos];
+          if (/\s/.test(ch)) {
+            if (pos > 0 && !/\s/.test(text[pos - 1])) {
+              startOffset = pos - 1;
+              endOffset = pos;
+            } else {
+              startOffset = pos;
+              endOffset = Math.min(text.length, pos + 1);
+            }
+          } else if (/[a-zA-Z0-9_\-$]/.test(ch)) {
+            while (startOffset > 0 && /[a-zA-Z0-9_\-$]/.test(text[startOffset - 1])) {
+              startOffset--;
+            }
+            while (endOffset < text.length && /[a-zA-Z0-9_\-$]/.test(text[endOffset])) {
+              endOffset++;
+            }
+          } else {
+            endOffset = Math.min(text.length, pos + 1);
+          }
+        }
+
+        if (startOffset >= endOffset) {
+          endOffset = Math.min(text.length, startOffset + 1);
+        }
+
+        const token = text.slice(startOffset, endOffset);
+        const allLines = text.split('\n');
+        const lineText = allLines[line - 1] || '';
+
+        // Specific diagnostic classification & actionable suggestions
+        let title = 'JSON Syntaxfehler';
+        let message = rawMsg;
+        let suggestion = `Überprüfe die Zeichenfolge in Zeile ${line}, Spalte ${col}.`;
+
+        if (lineText.includes("'")) {
+          title = 'Einfache Anführungszeichen unzulässig';
+          message = "JSON unterstützt nur doppelte Anführungszeichen (\"). Einfache Anführungszeichen (') sind ungültig.";
+          suggestion = "Ersetze alle einfachen Anführungszeichen durch doppelte Anführungszeichen (\").";
+        } else if (rawMsg.includes('Unexpected token') || rawMsg.includes('Expected') || rawMsg.includes('in JSON')) {
+          const prevSlice = text.slice(Math.max(0, pos - 25), pos);
+          if (token === '}' || token === ']' || prevSlice.includes(',')) {
+            if (prevSlice.trim().endsWith(',') || text.slice(0, pos).trim().endsWith(',')) {
+              title = 'Trailing Comma (Unzulässiges Komma am Ende)';
+              message = `In JSON darf vor einer schließenden Klammer '${token || '}'}' kein Komma stehen.`;
+              suggestion = `Entferne das überflüssige Komma vor '${token || '}'}'.`;
+            } else {
+              title = `Unerwartetes Zeichen '${token || '}'}'`;
+              message = `Schließende Klammer '${token}' an unerwarteter Position oder ohne offenes Gegenstück.`;
+              suggestion = "Überprüfe, ob alle { } und [ ] symmetrisch und in der richtigen Reihenfolge geschlossen sind.";
+            }
+          } else if (token === ':' || rawMsg.includes('Expected double-quoted property name')) {
+            title = 'Eigenschaftsschlüssel ohne Anführungszeichen';
+            message = 'In JSON müssen alle Objektschlüssel zwingend in doppelten Anführungszeichen stehen.';
+            suggestion = 'Setze doppelte Anführungszeichen um den Schlüsselnamen (z. B. "plugin").';
+          } else if (rawMsg.includes("Expected ',' or '}'") || rawMsg.includes("Expected ',' or ']'")) {
+            title = 'Fehlendes Trennkomma';
+            message = "Zwischen zwei Eigenschaften oder Listenelementen fehlt ein Komma ','.";
+            suggestion = "Füge ein Komma ',' am Ende der vorherigen Eigenschaftszeile ein.";
+          } else if (rawMsg.includes('Unexpected end of JSON') || rawMsg.includes('end of data')) {
+            title = 'Unerwartetes Dateiende';
+            message = 'Die JSON-Struktur ist unvollständig. Mindestens ein Objekt oder Array wurde nicht geschlossen.';
+            suggestion = 'Füge die fehlende schließende Klammer } oder ] am Ende der Datei hinzu.';
+          } else if (token === ';') {
+            title = 'Semikolon unzulässig';
+            message = 'In JSON werden Werte durch Kommas (,) getrennt, nicht durch Semikolons (;).';
+            suggestion = 'Ersetze das Semikolon durch ein Komma.';
+          } else if (lineText.includes('//') || lineText.includes('/*')) {
+            title = 'Kommentare in JSON unzulässig';
+            message = 'Standard-JSON erlaubt keine Kommentare (// oder /* */).';
+            suggestion = 'Entferne den Kommentar aus der Konfigurationsdatei.';
+          } else {
+            title = 'Syntaxfehler im JSON';
+            message = rawMsg.replace(/in JSON at position \d+/i, '').trim();
+            suggestion = `Korrigiere das Zeichen '${token}' in Zeile ${line}, Spalte ${col}.`;
+          }
+        }
+
+        // Pointer snippet
+        const safeCol = Math.max(1, col);
+        const pointerLine = ' '.repeat(safeCol - 1) + '^';
+        const snippet = `${lineText}\n${pointerLine}`;
+
+        return {
+          valid: false,
+          error: {
+            line,
+            column: col,
+            startOffset,
+            endOffset,
+            token,
+            title,
+            message,
+            suggestion,
+            snippet,
+            rawMessage: rawMsg
+          }
+        };
+      }
+    }
+
+    function findErrorOffsetByScanning(text) {
+      // Find quick obvious errors like unquoted keys
+      const unquotedMatch = /([{,]\s*)([a-zA-Z0-9_$]+)\s*:/m.exec(text);
+      if (unquotedMatch) {
+        return unquotedMatch.index + unquotedMatch[1].length;
+      }
+      return Math.max(0, text.length - 1);
+    }
+
+    function renderEditorUnderlines(rawText, error) {
+      const highlightsEl = document.getElementById('editor-highlights');
+      const gutterEl = document.getElementById('editor-gutter');
+      const errorBannerEl = document.getElementById('json-error-banner');
+      const errorBannerMsg = document.getElementById('json-error-banner-msg');
+      const containerEl = document.getElementById('code-editor-container');
+
+      const lines = rawText.split('\n');
+      const totalLines = Math.max(1, lines.length);
+
+      // 1. Render Gutter line numbers & error markers
+      if (gutterEl) {
+        let gutterHtml = '';
+        for (let i = 1; i <= totalLines; i++) {
+          const isErrLine = error && error.line === i;
+          gutterHtml += `
+            <div class="gutter-line ${isErrLine ? 'has-error' : ''}" data-line="${i}" ${isErrLine ? 'onmouseenter="showErrorTooltipForGutter(event)" onmouseleave="hideErrorTooltip()" onclick="jumpToErrorLine()"' : ''}>
+              ${isErrLine ? '<span class="gutter-error-icon" title="Klicke für Sprung zum Fehler">❌</span>' : ''}
+              <span>${i}</span>
+            </div>
+          `;
+        }
+        gutterEl.innerHTML = gutterHtml;
+      }
+
+      // 2. Render Underline in Highlights Overlay
+      if (highlightsEl) {
+        if (!error) {
+          highlightsEl.innerHTML = escapeHtml(rawText);
+        } else {
+          const start = Math.max(0, Math.min(error.startOffset, rawText.length));
+          const end = Math.max(start + 1, Math.min(error.endOffset, rawText.length));
+
+          const before = escapeHtml(rawText.slice(0, start));
+          let errSegment = rawText.slice(start, end);
+          if (!errSegment || errSegment === '\n' || errSegment === '\r') {
+            errSegment = ' '; // Give wavy line a physical character width
+          }
+          const errHtml = `<span class="json-err-underline" id="active-json-error-span" data-line="${error.line}" data-col="${error.column}">${escapeHtml(errSegment)}</span>`;
+          const after = escapeHtml(rawText.slice(end));
+
+          highlightsEl.innerHTML = before + errHtml + after;
+        }
+      }
+
+      // 3. Update container error class
+      if (containerEl) {
+        if (error) {
+          containerEl.classList.add('has-syntax-error');
+        } else {
+          containerEl.classList.remove('has-syntax-error');
+        }
+      }
+
+      // 4. Update Error Banner
+      if (errorBannerEl) {
+        if (error) {
+          errorBannerEl.style.display = 'flex';
+          if (errorBannerMsg) {
+            errorBannerMsg.innerHTML = `<strong>${escapeHtml(error.title)}:</strong> ${escapeHtml(error.message)} <span class="error-loc-tag">Zeile ${error.line}, Spalte ${error.column}</span>`;
+          }
+        } else {
+          errorBannerEl.style.display = 'none';
+        }
+      }
+    }
+
+    function onConfigEditorScroll() {
+      const textarea = document.getElementById('config-editor');
+      const backdrop = document.getElementById('editor-backdrop');
+      const gutter = document.getElementById('editor-gutter');
+
+      if (textarea && backdrop) {
+        backdrop.scrollTop = textarea.scrollTop;
+        backdrop.scrollLeft = textarea.scrollLeft;
+      }
+      if (textarea && gutter) {
+        gutter.scrollTop = textarea.scrollTop;
+      }
+    }
+
+    function onConfigEditorMouseMove(e) {
+      if (!currentJsonError) {
+        hideErrorTooltip();
+        return;
+      }
+
+      const textarea = document.getElementById('config-editor');
+      if (!textarea) return;
+
+      const rect = textarea.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Font metrics: 12px font, 20px line-height, 12px padding, ~7.22px char width
+      const padding = 12;
+      const lineHeight = 20;
+      const charWidth = 7.22;
+
+      const scrolledY = mouseY + textarea.scrollTop - padding;
+      const hoveredLine = Math.floor(scrolledY / lineHeight) + 1;
+
+      const scrolledX = mouseX + textarea.scrollLeft - padding;
+      const hoveredCol = Math.max(1, Math.floor(scrolledX / charWidth) + 1);
+
+      // Trigger tooltip when hovering on or near the error line & column
+      if (hoveredLine === currentJsonError.line) {
+        showErrorTooltip(e.clientX, e.clientY, currentJsonError);
+      } else {
+        hideErrorTooltip();
+      }
+    }
+
+    function showErrorTooltip(x, y, error) {
+      const tooltip = document.getElementById('json-error-tooltip');
+      if (!tooltip || !error) return;
+
+      document.getElementById('tooltip-title').textContent = error.title;
+      document.getElementById('tooltip-badge').textContent = `Zeile ${error.line}, Spalte ${error.column}`;
+      document.getElementById('tooltip-msg').textContent = error.message;
+      document.getElementById('tooltip-suggestion').innerHTML = `💡 <strong>Empfehlung:</strong> ${escapeHtml(error.suggestion)}`;
+      document.getElementById('tooltip-preview').textContent = error.snippet;
+
+      // Positioning with viewport boundary checking
+      const tooltipWidth = 400;
+      const tooltipHeight = 180;
+      let posX = x + 16;
+      let posY = y + 16;
+
+      if (posX + tooltipWidth > window.innerWidth) {
+        posX = Math.max(10, window.innerWidth - tooltipWidth - 20);
+      }
+      if (posY + tooltipHeight > window.innerHeight) {
+        posY = Math.max(10, y - tooltipHeight - 10);
+      }
+
+      tooltip.style.left = `${posX}px`;
+      tooltip.style.top = `${posY}px`;
+      tooltip.style.display = 'block';
+    }
+
+    function showErrorTooltipForGutter(e) {
+      if (!currentJsonError) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      showErrorTooltip(rect.right + 8, rect.top - 10, currentJsonError);
+    }
+
+    function hideErrorTooltip() {
+      const tooltip = document.getElementById('json-error-tooltip');
+      if (tooltip) {
+        tooltip.style.display = 'none';
+      }
+    }
+
+    function jumpToErrorLine() {
+      if (!currentJsonError) return;
+      const textarea = document.getElementById('config-editor');
+      if (!textarea) return;
+
+      textarea.focus();
+      const start = currentJsonError.startOffset;
+      const end = currentJsonError.endOffset;
+      textarea.setSelectionRange(start, end);
+
+      const lineHeight = 20;
+      const targetScrollTop = Math.max(0, (currentJsonError.line - 4) * lineHeight);
+      textarea.scrollTop = targetScrollTop;
+      onConfigEditorScroll();
+
+      showToast(`🎯 Sprung zu Zeile ${currentJsonError.line}, Spalte ${currentJsonError.column}`, 'info');
+    }
+
+    function handleEditorKeyDown(e) {
+      const textarea = document.getElementById('config-editor');
+      if (!textarea) return;
+
+      // Tab key indentation support (2 spaces)
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const value = textarea.value;
+
+        if (e.shiftKey) {
+          // Outdent
+          const before = value.substring(0, start);
+          const after = value.substring(end);
+          if (before.endsWith('  ')) {
+            textarea.value = before.slice(0, -2) + after;
+            textarea.selectionStart = textarea.selectionEnd = start - 2;
+          }
+        } else {
+          // Indent 2 spaces
+          textarea.value = value.substring(0, start) + '  ' + value.substring(end);
+          textarea.selectionStart = textarea.selectionEnd = start + 2;
+        }
+        onConfigEditorInput();
+      } else if (e.key === 'Escape') {
+        hideErrorTooltip();
       }
     }
 
     function onConfigEditorInput() {
       const statusEl = document.getElementById('json-syntax-status');
+      const previewBadge = document.getElementById('preview-badge-status');
       const previewEl = document.getElementById('config-preview-panel');
-      try {
-        const rawText = document.getElementById('config-editor').value;
-        const parsed = JSON.parse(rawText);
+      const metaEl = document.getElementById('json-editor-meta');
+      const textarea = document.getElementById('config-editor');
+      if (!textarea) return;
+
+      const rawText = textarea.value;
+
+      if (metaEl) {
+        const lines = rawText.split('\n').length;
+        metaEl.textContent = `${lines} Zeilen | ${rawText.length} Bytes`;
+      }
+
+      const result = analyzeJsonSyntax(rawText);
+
+      if (result.valid) {
+        currentJsonError = null;
         if (statusEl) {
           statusEl.className = 'badge badge-green';
           statusEl.textContent = 'Valid JSON';
         }
-        if (previewEl) {
-          previewEl.textContent = JSON.stringify(parsed, null, 2);
+        if (previewBadge) {
+          previewBadge.className = 'badge badge-blue';
+          previewBadge.textContent = 'Kompiliert';
         }
-      } catch (err) {
+        if (previewEl) {
+          previewEl.style.color = 'var(--text-muted)';
+          previewEl.textContent = JSON.stringify(result.parsed, null, 2);
+        }
+        renderEditorUnderlines(rawText, null);
+        hideErrorTooltip();
+      } else {
+        currentJsonError = result.error;
         if (statusEl) {
           statusEl.className = 'badge badge-red';
-          statusEl.textContent = 'Syntax Error';
+          statusEl.textContent = `Syntaxfehler (Z.${result.error.line})`;
         }
+        if (previewBadge) {
+          previewBadge.className = 'badge badge-red';
+          previewBadge.textContent = 'Fehler';
+        }
+        if (previewEl) {
+          previewEl.style.color = '#fca5a5';
+          previewEl.textContent = `❌ ${result.error.title} in Zeile ${result.error.line}, Spalte ${result.error.column}\n\n${result.error.message}\n\n${result.error.snippet}\n\n💡 Empfehlung:\n${result.error.suggestion}`;
+        }
+        renderEditorUnderlines(rawText, result.error);
+      }
+
+      onConfigEditorScroll();
+    }
+
+    function validateConfigJson() {
+      const rawText = document.getElementById('config-editor').value;
+      const result = analyzeJsonSyntax(rawText);
+      if (result.valid) {
+        showToast('✅ Validierung erfolgreich: JSON ist syntaktisch einwandfrei!', 'success');
+        return true;
+      } else {
+        showToast(`❌ ${result.error.title}: Zeile ${result.error.line}, Spalte ${result.error.column}`, 'error');
+        jumpToErrorLine();
+        return false;
       }
     }
 
@@ -1995,11 +3324,16 @@
         const parsed = JSON.parse(rawText);
         const formatted = JSON.stringify(parsed, null, 2);
         document.getElementById('config-editor').value = formatted;
-        document.getElementById('config-preview-panel').textContent = formatted;
         onConfigEditorInput();
         showToast('✨ JSON erfolgreich formatiert!', 'success');
       } catch (err) {
-        showToast('Formatieren fehlgeschlagen: Ungültiges JSON', 'error');
+        const res = analyzeJsonSyntax(document.getElementById('config-editor').value);
+        if (res.error) {
+          showToast(`Formatieren nicht möglich: ${res.error.title} in Zeile ${res.error.line}`, 'error');
+          jumpToErrorLine();
+        } else {
+          showToast('Formatieren fehlgeschlagen: Ungültiges JSON', 'error');
+        }
       }
     }
 
@@ -2024,7 +3358,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mcps: ids })
         });
-        if (res.ok) showToast(`🚀 ${ids.length} MCP Server installiert!`, 'success');
+        if (res.ok) showToast(`🚀 ${ids.length} MCP Server registriert!`, 'success');
       } catch (err) {
         showToast('Installation fehlgeschlagen', 'error');
       }
@@ -2041,7 +3375,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plugins: selectedPlugins })
         });
-        if (res.ok) showToast(`🚀 ${selectedPlugins.length} Plugins installiert!`, 'success');
+        if (res.ok) showToast(`🚀 ${selectedPlugins.length} Plugins registriert!`, 'success');
       } catch (err) {
         showToast('Installation fehlgeschlagen', 'error');
       }
@@ -2054,6 +3388,7 @@
         const data = await res.json();
         allProjects = data.projects || [];
         const dropdown = document.getElementById('project-dropdown');
+        if (!dropdown) return;
         dropdown.innerHTML = '';
 
         allProjects.forEach(p => {
@@ -2064,7 +3399,8 @@
           dropdown.appendChild(opt);
         });
 
-        document.getElementById('current-project-info').textContent = `Aktiv: ${data.current || 'Keine Auswahl'}`;
+        const curEl = document.getElementById('current-project-info');
+        if (curEl) curEl.textContent = `Aktiv: ${data.current || 'Keine Auswahl'}`;
       } catch (err) {}
     }
 
@@ -2076,7 +3412,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ path })
         });
-        document.getElementById('current-project-info').textContent = `Aktiv: ${path}`;
+        const curEl = document.getElementById('current-project-info');
+        if (curEl) curEl.textContent = `Aktiv: ${path}`;
         showToast(`Arbeitsordner gewechselt: ${path}`, 'success');
       } catch (err) {}
     }
@@ -2098,7 +3435,7 @@
         const verEl = document.getElementById('sys-version');
         const pathEl = document.getElementById('sys-path');
         if (verEl) verEl.textContent = data.version || 'v1.18.5';
-        if (pathEl) pathEl.textContent = data.path || '~/.config/opencode/opencode.json';
+        if (pathEl) pathEl.textContent = 'opencode.json';
 
         if (data.runtime) {
           const runEl = document.getElementById('sys-runtime');
@@ -2114,32 +3451,6 @@
           const authEl = document.getElementById('sys-auth-providers');
           if (authEl) authEl.textContent = data.auth_providers.join(', ');
         }
-
-        const badgeEl = document.getElementById('sys-build-badge');
-        const subEl = document.getElementById('sys-build-sub');
-        const genBadge = document.getElementById('oneclick-generator-badge');
-        const genContainer = document.getElementById('generator-action-container');
-
-        if (data.isExportedBuild) {
-          if (badgeEl) {
-            badgeEl.className = 'badge badge-blue';
-            badgeEl.textContent = 'Deployed Clean Build';
-          }
-          if (subEl) subEl.textContent = '1-Klick Generator in diesem Build deaktiviert';
-          if (genBadge) {
-            genBadge.className = 'badge badge-gray';
-            genBadge.textContent = 'Generator Entfernt';
-          }
-          if (genContainer) {
-            genContainer.innerHTML = '<div style="font-size: 11px; color: var(--text-muted); font-style: italic; padding: 6px 0;">In diesem fertig deploytem Production Build ist die 1-Klick Generator Funktion absichtlich entfernt / deaktiviert.</div>';
-          }
-        } else {
-          if (badgeEl) {
-            badgeEl.className = 'badge badge-gold';
-            badgeEl.textContent = 'Master Builder Build';
-          }
-          if (subEl) subEl.textContent = '1-Klick Standalone Generator Aktiv';
-        }
       } catch (err) {}
     }
 
@@ -2151,24 +3462,24 @@
         const text = document.getElementById('opencode-status-text');
 
         if (data.running) {
-          dot.className = 'status-dot active';
-          text.textContent = `Opencode läuft (PID: ${data.pids ? data.pids.join(', ') : 'Active'})`;
+          if (dot) dot.className = 'status-dot active';
+          if (text) text.textContent = `OpenCode läuft (PID: ${data.pids ? data.pids.join(', ') : 'Active'})`;
         } else {
-          dot.className = 'status-dot';
-          text.textContent = 'Opencode gestoppt';
+          if (dot) dot.className = 'status-dot';
+          if (text) text.textContent = 'OpenCode gestoppt';
         }
       } catch (err) {}
     }
 
     async function startOpencodeApp() {
       try {
-        showToast('🚀 Starte OpenCode Process...', 'warning');
+        showToast('🚀 Starte OpenCode Prozess...', 'info');
         const res = await fetch('/api/opencode/start', { method: 'POST' });
         const data = await res.json();
-        showToast(`🚀 Opencode CLI erfolgreich gestartet! (PID: ${data.pid})`, 'success');
+        showToast(`🚀 OpenCode Daemon gestartet! (PID: ${data.pid})`, 'success');
         await checkOpencodeStatus();
       } catch (err) {
-        showToast('Fehler beim Starten von Opencode', 'error');
+        showToast('Fehler beim Starten von OpenCode', 'error');
       }
     }
 
@@ -2176,10 +3487,10 @@
       try {
         const res = await fetch('/api/opencode/kill', { method: 'POST' });
         const data = await res.json();
-        showToast(`🛑 Opencode Process gestoppt (PID: ${data.pid})`, 'warning');
+        showToast(`🛑 OpenCode Prozess gestoppt (PID: ${data.pid})`, 'warning');
         await checkOpencodeStatus();
       } catch (err) {
-        showToast('Fehler beim Beenden von Opencode', 'error');
+        showToast('Fehler beim Beenden von OpenCode', 'error');
       }
     }
 
@@ -2187,7 +3498,7 @@
       try {
         const res = await fetch('/api/opencode/full-cycle', { method: 'POST' });
         const data = await res.json();
-        showToast(`🔄 Full Cycle ausgeführt! Neuer Process (PID: ${data.pid})`, 'success');
+        showToast(`🔄 Full Cycle ausgeführt! (PID: ${data.pid})`, 'success');
         await checkOpencodeStatus();
       } catch (err) {
         showToast('Fehler beim Full-Cycle Start', 'error');
@@ -2197,6 +3508,7 @@
     // TOAST
     function showToast(msg, type = 'success') {
       const area = document.getElementById('notification-area');
+      if (!area) return;
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
       toast.textContent = msg;
@@ -2207,12 +3519,21 @@
         toast.style.transform = 'translateX(20px)';
         toast.style.transition = 'all 0.3s ease';
         setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      }, 3200);
     }
 
-    // AI Check & Fix
+    // AI Check & Auto-Fix Modal
     function closeAiModal() {
-      document.getElementById('ai-modal').style.display = 'none';
+      const modal = document.getElementById('ai-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function copyAiLogs() {
+      const logContainer = document.getElementById('ai-log-container');
+      if (!logContainer) return;
+      navigator.clipboard.writeText(logContainer.innerText).then(() => {
+        showToast('📋 AI-Logs in Zwischenablage kopiert!', 'success');
+      });
     }
 
     async function runAiCheckFix() {
@@ -2225,38 +3546,34 @@
       footerBtn.disabled = true;
       footerBtn.textContent = 'Analysiere...';
       
-      // Add initial connecting log
       addLogLine('🔌 Verbinde mit AI Studio Engine...', '#60a5fa');
       
       try {
         const response = await fetch('/api/ai-check-fix', { method: 'POST' });
         const data = await response.json();
         
-        if(data.status === 'success') {
-          // Playback logs with delay
-          for(let i = 0; i < data.logs.length; i++) {
-            await new Promise(r => setTimeout(r, 600));
+        if (data.status === 'success') {
+          for (let i = 0; i < data.logs.length; i++) {
+            await new Promise(r => setTimeout(r, 400));
             const logStr = data.logs[i];
             let color = 'var(--text-main)';
-            if(logStr.includes('⚠️')) color = 'var(--amber)';
-            if(logStr.includes('✅')) color = 'var(--emerald)';
-            if(logStr.includes('✨')) color = 'var(--accent-hover)';
+            if (logStr.includes('⚠️')) color = 'var(--amber)';
+            if (logStr.includes('✅')) color = 'var(--emerald)';
+            if (logStr.includes('✨')) color = 'var(--accent-hover)';
             addLogLine(logStr, color);
           }
           
-          await new Promise(r => setTimeout(r, 500));
+          await new Promise(r => setTimeout(r, 300));
           footerBtn.disabled = false;
           footerBtn.textContent = 'Schließen & Anwenden';
-          
-          // Optionally show toast
           showToast(data.message, 'success');
         } else {
-          addLogLine('❌ Analyse fehlgeschlagen.', 'var(--accent)');
+          addLogLine('❌ Analyse fehlgeschlagen.', 'var(--rose)');
           footerBtn.disabled = false;
           footerBtn.textContent = 'Schließen';
         }
       } catch (err) {
-        addLogLine('❌ Netzwerkfehler beim AI Check.', 'var(--accent)');
+        addLogLine('❌ Netzwerkfehler beim AI Check.', 'var(--rose)');
         footerBtn.disabled = false;
         footerBtn.textContent = 'Schließen';
       }
@@ -2264,40 +3581,368 @@
 
     function addLogLine(text, color) {
       const logContainer = document.getElementById('ai-log-container');
+      if (!logContainer) return;
       const div = document.createElement('div');
       div.className = 'ai-log-line';
       div.textContent = text;
       div.style.color = color;
       if (text.includes('⚠️')) div.style.borderLeftColor = 'var(--amber)';
       if (text.includes('✅')) div.style.borderLeftColor = 'var(--emerald)';
+      if (text.includes('🔌') || text.includes('✨')) div.style.borderLeftColor = 'var(--accent)';
       
       logContainer.appendChild(div);
-      
-      // Trigger reflow for animation
       void div.offsetWidth;
       div.classList.add('show');
-      
-      // Auto-scroll
       logContainer.scrollTop = logContainer.scrollHeight;
     }
-  </script>
 
-  <!-- AI MODAL -->
-  <div class="modal-overlay" id="ai-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
-          AI Check & Auto-Fix
-        </div>
-      </div>
-      <div class="modal-body" id="ai-log-container">
-        <!-- Logs go here -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
-      </div>
-    </div>
-  </div>
+    // ==========================================
+    // GLOBAL COMMAND PALETTE (CTRL+K) ENGINE
+    // ==========================================
+    let commandPaletteItems = [];
+    let selectedPaletteIndex = 0;
+
+    function getAvailableCommands() {
+      return [
+        // Tab Navigation Commands
+        {
+          id: 'nav-dashboard',
+          title: 'Dashboard öffnen',
+          category: 'Navigation',
+          desc: 'Übersicht über Telemetrie, Metriken und Systemstatus',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('dashboard')
+        },
+        {
+          id: 'nav-config',
+          title: 'opencode.json Editor öffnen',
+          category: 'Navigation',
+          desc: 'Live JSON-Editor mit Echtzeit-Syntax-Highlighter & Gutter',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('config')
+        },
+        {
+          id: 'nav-provider',
+          title: 'KI-Modelle & Provider öffnen',
+          category: 'Navigation',
+          desc: 'Model-Katalog, Default-Modelle, Fallbacks & Reasoning',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('provider')
+        },
+        {
+          id: 'nav-erweiterungen',
+          title: 'Plugins & Skills öffnen',
+          category: 'Navigation',
+          desc: 'OpenCode Tools, Git Integrationen, Browser Automation',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('erweiterungen')
+        },
+        {
+          id: 'nav-integrationen',
+          title: 'MCP & LSP Server öffnen',
+          category: 'Navigation',
+          desc: 'Model Context Protocol & Language Server Protokolle',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('integrationen')
+        },
+        {
+          id: 'nav-design',
+          title: 'Themes & Visuals öffnen',
+          category: 'Navigation',
+          desc: 'OpenCode Farbpaletten, Tokyo Night, Dracula, Tweaker Cyber',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('design')
+        },
+        {
+          id: 'nav-system',
+          title: 'System & Runtime öffnen',
+          category: 'Navigation',
+          desc: 'Umgebungsvariablen, Config-Backups & API-Schlüssel',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+          badge: 'Tab',
+          action: () => switchTab('system')
+        },
+
+        // Action Commands
+        {
+          id: 'act-save',
+          title: 'Konfiguration Speichern (Save)',
+          category: 'Aktionen',
+          desc: 'Speichert die aktuelle opencode.json Konfiguration ab',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>',
+          badge: 'Ctrl+S',
+          action: () => {
+            const activeTab = document.querySelector('.tab-section.active');
+            if (activeTab && activeTab.id === 'tab-config') {
+              saveRawConfigEditor();
+            } else {
+              saveConfig();
+            }
+          }
+        },
+        {
+          id: 'act-format',
+          title: 'JSON Formatieren (Prettify / Format)',
+          category: 'Aktionen',
+          desc: 'Formatiert die opencode.json mit 2 Spaces Einrückung',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
+          badge: 'Format',
+          action: () => {
+            switchTab('config');
+            prettifyConfigJson();
+          }
+        },
+        {
+          id: 'act-validate',
+          title: 'JSON Syntax Validieren',
+          category: 'Aktionen',
+          desc: 'Prüft opencode.json auf strukturelle und syntaktische Korrektheit',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+          badge: 'Check',
+          action: () => {
+            switchTab('config');
+            validateConfigJson();
+          }
+        },
+        {
+          id: 'act-ai-fix',
+          title: 'AI Check & Auto-Fix ausführen',
+          category: 'Aktionen',
+          desc: 'Diagnostiziert Inkonsistenzen und repariert opencode.json automatisch',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M12 6v6l4 2"/></svg>',
+          badge: 'AI Engine',
+          action: () => runAiCheckFix()
+        },
+        {
+          id: 'act-start-app',
+          title: 'OpenCode CLI / App Starten',
+          category: 'Aktionen',
+          desc: 'Startet den lokalen OpenCode Prozess mit der aktuellen Konfiguration',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+          badge: 'Zünden',
+          action: () => startOpencodeApp()
+        },
+        {
+          id: 'act-reset-config',
+          title: 'Konfiguration auf Standard zurücksetzen',
+          category: 'Aktionen',
+          desc: 'Stellt die offizielle opencode.json Standardkonfiguration wieder her',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+          badge: 'Reset',
+          action: () => resetConfigToDefault()
+        },
+        {
+          id: 'act-toggle-wallpaper',
+          title: 'Hintergrund-Animation Umschalten',
+          category: 'Aktionen',
+          desc: 'Wechselt zwischen Matrix Rain, Neural Network und Minimalem Modus',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
+          badge: 'Wallpaper',
+          action: () => toggleWallpaper()
+        },
+
+        // Preset Commands
+        {
+          id: 'preset-general',
+          title: 'Preset anwenden: General Optimal',
+          category: 'Presets',
+          desc: 'Ausgewogenes Setup für allgemeine Software-Entwicklung',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+          badge: 'Preset',
+          action: () => applyPreset('general')
+        },
+        {
+          id: 'preset-fullstack',
+          title: 'Preset anwenden: Fullstack Web (TypeScript/React)',
+          category: 'Presets',
+          desc: 'Tailwind, Node/TS LSP, Playwright Browser und React Tools',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+          badge: 'Preset',
+          action: () => applyPreset('fullstack')
+        },
+        {
+          id: 'preset-python',
+          title: 'Preset anwenden: Python & Data Science',
+          category: 'Presets',
+          desc: 'Pyright LSP, Ruff Linter, Jupyter MCP und SQLite Integration',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',
+          badge: 'Preset',
+          action: () => applyPreset('python')
+        },
+        {
+          id: 'preset-agent',
+          title: 'Preset anwenden: Autonomous Agent',
+          category: 'Presets',
+          desc: 'Maximaler Tool-Zugriff mit Browser Automation, MCP & Memory',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>',
+          badge: 'Preset',
+          action: () => applyPreset('agent')
+        }
+      ];
+    }
+
+    function openCommandPalette() {
+      const overlay = document.getElementById('cmd-palette-overlay');
+      const input = document.getElementById('cmd-palette-input');
+      if (!overlay || !input) return;
+
+      overlay.style.display = 'flex';
+      input.value = '';
+      selectedPaletteIndex = 0;
+      filterAndRenderCommandPalette('');
+      setTimeout(() => input.focus(), 20);
+    }
+
+    function closeCommandPalette() {
+      const overlay = document.getElementById('cmd-palette-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function toggleCommandPalette() {
+      const overlay = document.getElementById('cmd-palette-overlay');
+      if (overlay && overlay.style.display === 'flex') {
+        closeCommandPalette();
+      } else {
+        openCommandPalette();
+      }
+    }
+
+    function handlePaletteOverlayClick(e) {
+      if (e.target.id === 'cmd-palette-overlay') {
+        closeCommandPalette();
+      }
+    }
+
+    function onCommandPaletteInput(e) {
+      const query = e.target.value.toLowerCase().trim();
+      selectedPaletteIndex = 0;
+      filterAndRenderCommandPalette(query);
+    }
+
+    function filterAndRenderCommandPalette(query) {
+      const allCommands = getAvailableCommands();
+      const resultsContainer = document.getElementById('cmd-results-list');
+      if (!resultsContainer) return;
+
+      if (!query) {
+        commandPaletteItems = allCommands;
+      } else {
+        commandPaletteItems = allCommands.filter(item => {
+          return item.title.toLowerCase().includes(query) ||
+                 item.desc.toLowerCase().includes(query) ||
+                 item.category.toLowerCase().includes(query) ||
+                 (item.badge && item.badge.toLowerCase().includes(query));
+        });
+      }
+
+      if (commandPaletteItems.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="cmd-empty-state">
+            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
+            <div style="color: var(--text-main); font-weight: 600; margin-bottom: 4px;">Keine Befehle gefunden</div>
+            <div style="font-size: 12px;">Kein Eintrag entspricht "${escapeHtml(query)}"</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Group items by category
+      const categories = ['Navigation', 'Aktionen', 'Presets'];
+      let html = '';
+      let globalIndex = 0;
+
+      categories.forEach(cat => {
+        const itemsInCat = commandPaletteItems.filter(it => it.category === cat);
+        if (itemsInCat.length > 0) {
+          html += `<div class="cmd-group-header">${cat}</div>`;
+          itemsInCat.forEach(item => {
+            const isSelected = globalIndex === selectedPaletteIndex;
+            html += `
+              <div class="cmd-item ${isSelected ? 'selected' : ''}" data-idx="${globalIndex}" onclick="executePaletteItem(${globalIndex})" onmouseenter="selectPaletteItem(${globalIndex})">
+                <div class="cmd-item-left">
+                  <div class="cmd-item-icon">${item.icon}</div>
+                  <div>
+                    <span style="font-weight: 600;">${escapeHtml(item.title)}</span>
+                    <span class="cmd-item-desc">${escapeHtml(item.desc)}</span>
+                  </div>
+                </div>
+                <span class="cmd-item-badge">${escapeHtml(item.badge || '')}</span>
+              </div>
+            `;
+            globalIndex++;
+          });
+        }
+      });
+
+      resultsContainer.innerHTML = html;
+      scrollSelectedPaletteItemIntoView();
+    }
+
+    function selectPaletteItem(index) {
+      selectedPaletteIndex = index;
+      const items = document.querySelectorAll('.cmd-item');
+      items.forEach((el, idx) => {
+        if (idx === index) {
+          el.classList.add('selected');
+        } else {
+          el.classList.remove('selected');
+        }
+      });
+    }
+
+    function scrollSelectedPaletteItemIntoView() {
+      const selectedEl = document.querySelector('.cmd-item.selected');
+      if (selectedEl) {
+        selectedEl.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function onCommandPaletteKeyDown(e) {
+      if (commandPaletteItems.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedPaletteIndex = (selectedPaletteIndex + 1) % commandPaletteItems.length;
+        selectPaletteItem(selectedPaletteIndex);
+        scrollSelectedPaletteItemIntoView();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedPaletteIndex = (selectedPaletteIndex - 1 + commandPaletteItems.length) % commandPaletteItems.length;
+        selectPaletteItem(selectedPaletteIndex);
+        scrollSelectedPaletteItemIntoView();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        executePaletteItem(selectedPaletteIndex);
+      }
+    }
+
+    function executePaletteItem(index) {
+      if (index >= 0 && index < commandPaletteItems.length) {
+        const cmd = commandPaletteItems[index];
+        closeCommandPalette();
+        if (cmd && typeof cmd.action === 'function') {
+          cmd.action();
+        }
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
 </body>
 </html>
