@@ -1,0 +1,6 @@
+{
+  "name": "OpenCode - Tweaker",
+  "description": "OpenCode - Tweaker (formerly IOCM) - High-performance dark studio management system for opencode.json configurations, MCP servers, LSP language servers, AI models, plugins, skills, themes, and system deployment. Now featuring AI-Check & Auto-Fix.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
