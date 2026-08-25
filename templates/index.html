@@ -1348,6 +1348,12 @@
       </div>
 
       <div class="header-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openByokModal()" id="btn-byok-auth" title="Eigenen Gemini API-Key hinterlegen (BYOK)">
+          <span style="display: flex; align-items: center; gap: 4px;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7 8.5 5.5 7 7l-1.5-1.5L4 7 2 5v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2z"/><circle cx="8" cy="14" r="2"/></svg>
+            <span id="byok-header-label">API-Key</span>
+          </span>
+        </button>
         <button class="btn btn-secondary btn-sm" onclick="openCommandPalette()" id="btn-cmd-palette" title="Befehlspalette öffnen (Ctrl+K)">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Befehle <span class="cmd-shortcut-tag" style="margin-left: 6px; padding: 1px 5px; font-size: 10px;">Ctrl+K</span>
@@ -1746,6 +1752,32 @@
                 <div>Auth Provider: <span id="sys-auth-providers" style="color: var(--text-main);">Anthropic, OpenAI, Google, DeepSeek, Ollama, Mistral AI</span></div>
               </div>
             </div>
+
+            <!-- BYOK GOOGLE GEMINI AUTH CARD -->
+            <div class="card" style="grid-column: 1 / -1; border-color: rgba(59, 130, 246, 0.4); background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 29, 0.6) 100%);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 10px;">
+                <div>
+                  <div class="card-title" style="color: #60a5fa; display: flex; align-items: center; gap: 6px;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7 8.5 5.5 7 7l-1.5-1.5L4 7 2 5v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2z"/><circle cx="8" cy="14" r="2"/></svg>
+                    Google Gemini API-Key (BYOK - Bring Your Own Key)
+                  </div>
+                  <div style="font-size: 12px; color: var(--text-muted); max-width: 650px; line-height: 1.5; margin-top: 4px;">
+                    Jeder Besucher dieser App kann seinen persönlichen kostenlosen Google Gemini API-Key verwenden. Der Key wird rein clientseitig im lokalen Speicher deines Browsers aufbewahrt und für Echtzeit-KI-Analysen genutzt.
+                  </div>
+                </div>
+                <div id="byok-status-pill" class="badge badge-secondary" style="font-size: 11px; padding: 4px 10px;">
+                  Status: Standard Server-Key
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 8px;">
+                <button class="btn btn-primary btn-sm" onclick="openByokModal()">
+                  🔑 API-Key Konfigurieren / Hinterlegen
+                </button>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="text-decoration: none;">
+                  ↗ Kostenlosen Gemini API-Key bei Google holen
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -1770,6 +1802,50 @@
       <div class="modal-footer">
         <button class="btn btn-secondary btn-sm" onclick="copyAiLogs()" id="ai-modal-copy-btn">📋 Logs Kopieren</button>
         <button class="btn btn-primary" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BYOK / PERSONAL GEMINI API KEY MODAL -->
+  <div class="modal-overlay" id="byok-modal">
+    <div class="modal-content" style="max-width: 580px;">
+      <div class="modal-header">
+        <div class="modal-title" style="color: #60a5fa; display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7 8.5 5.5 7 7l-1.5-1.5L4 7 2 5v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2z"/><circle cx="8" cy="14" r="2"/></svg>
+          Persönlichen Gemini API-Key (BYOK)
+        </div>
+        <button class="modal-close-icon" onclick="closeByokModal()" title="Schließen">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px 24px;">
+        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; font-size: 12px; color: var(--text-main); line-height: 1.6;">
+          <div style="font-weight: 700; color: #93c5fd; margin-bottom: 4px;">💡 Eigenes Google Konto / Eigener API-Key:</div>
+          Jeder Benutzer kann seinen eigenen kostenlosen Google Gemini API-Key verwenden. Dein Key wird sicher im <b style="color: #fff;">lokalen Speicher deines Browsers</b> aufbewahrt und nicht auf fremden Servern persistiert.
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">Google Gemini API Key (AIzaSy...):</label>
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="password" id="byok-input-key" class="text-input" placeholder="AIzaSy..." style="width: 100%; padding-right: 40px; font-family: monospace; font-size: 13px;">
+            <button type="button" onclick="toggleByokKeyVisibility()" style="position: absolute; right: 8px; background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 4px;" title="Key anzeigen/verbergen">
+              <svg id="byok-eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="byok-test-result" style="display: none; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 14px;"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-dim);">
+          <span>Noch keinen Key? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="color: var(--accent-hover); text-decoration: underline;">Google AI Studio Key erstellen (kostenlos)</a></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div>
+          <button class="btn btn-danger btn-sm" onclick="removeByokKey()" id="btn-byok-delete" style="display: none;">Key entfernen</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="closeByokModal()">Abbrechen</button>
+          <button class="btn btn-primary btn-sm" onclick="saveAndTestByokKey()" id="btn-byok-save">🔑 Testen & Speichern</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1846,6 +1922,12 @@
         const cmdPalette = document.getElementById('cmd-palette-overlay');
         if (cmdPalette && cmdPalette.style.display === 'flex') {
           closeCommandPalette();
+          return;
+        }
+
+        const byokModal = document.getElementById('byok-modal');
+        if (byokModal && byokModal.style.display === 'flex') {
+          closeByokModal();
           return;
         }
 
@@ -2038,6 +2120,7 @@
     // INITIALIZATION LIFECYCLE
     document.addEventListener('DOMContentLoaded', async () => {
       initMatrixRainCanvas();
+      initByokState();
       await loadAllData();
       await checkOpencodeStatus();
       setInterval(checkOpencodeStatus, 10000);
@@ -3522,6 +3605,145 @@
       }, 3200);
     }
 
+    // BYOK (BRING YOUR OWN KEY) MANAGEMENT
+    function initByokState() {
+      const savedKey = localStorage.getItem('opencode_gemini_key');
+      const headerLabel = document.getElementById('byok-header-label');
+      const headerBtn = document.getElementById('btn-byok-auth');
+      const statusPill = document.getElementById('byok-status-pill');
+
+      if (savedKey && savedKey.trim().length > 0) {
+        if (headerLabel) headerLabel.textContent = 'Key: Eigener aktiv';
+        if (headerBtn) {
+          headerBtn.classList.remove('btn-secondary');
+          headerBtn.classList.add('btn-success');
+          headerBtn.title = 'Persönlicher Gemini API-Key aktiv (Klick zum Verwalten)';
+        }
+        if (statusPill) {
+          statusPill.className = 'badge badge-success';
+          statusPill.textContent = 'Status: Eigener Google Key Aktiv';
+        }
+      } else {
+        if (headerLabel) headerLabel.textContent = 'API-Key (BYOK)';
+        if (headerBtn) {
+          headerBtn.classList.remove('btn-success');
+          headerBtn.classList.add('btn-secondary');
+          headerBtn.title = 'Eigenen Gemini API-Key hinterlegen (BYOK)';
+        }
+        if (statusPill) {
+          statusPill.className = 'badge badge-secondary';
+          statusPill.textContent = 'Status: Standard Server-Key / Fallback';
+        }
+      }
+    }
+
+    function openByokModal() {
+      const modal = document.getElementById('byok-modal');
+      const inputKey = document.getElementById('byok-input-key');
+      const deleteBtn = document.getElementById('btn-byok-delete');
+      const testResult = document.getElementById('byok-test-result');
+      
+      if (!modal) return;
+      
+      const savedKey = localStorage.getItem('opencode_gemini_key') || '';
+      if (inputKey) inputKey.value = savedKey;
+      if (deleteBtn) deleteBtn.style.display = savedKey ? 'inline-block' : 'none';
+      if (testResult) testResult.style.display = 'none';
+
+      modal.style.display = 'flex';
+      setTimeout(() => inputKey && inputKey.focus(), 50);
+    }
+
+    function closeByokModal() {
+      const modal = document.getElementById('byok-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function toggleByokKeyVisibility() {
+      const input = document.getElementById('byok-input-key');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    async function saveAndTestByokKey() {
+      const inputKey = document.getElementById('byok-input-key');
+      const saveBtn = document.getElementById('btn-byok-save');
+      const testResult = document.getElementById('byok-test-result');
+      
+      if (!inputKey || !saveBtn || !testResult) return;
+      const keyVal = inputKey.value.trim();
+
+      if (!keyVal) {
+        testResult.style.display = 'block';
+        testResult.style.background = 'rgba(239, 68, 68, 0.15)';
+        testResult.style.border = '1px solid var(--rose)';
+        testResult.style.color = 'var(--rose)';
+        testResult.textContent = '⚠️ Bitte gib einen gültigen Gemini API Key ein (beginnt meist mit AIzaSy...).';
+        return;
+      }
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = '⏳ Validiere Key...';
+      testResult.style.display = 'block';
+      testResult.style.background = 'rgba(59, 130, 246, 0.15)';
+      testResult.style.border = '1px solid var(--accent)';
+      testResult.style.color = 'var(--accent-hover)';
+      testResult.textContent = '🔌 Teste Verbindung mit Google Gemini API...';
+
+      try {
+        const response = await fetch('/api/gemini/validate-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ apiKey: keyVal })
+        });
+        const data = await response.json();
+
+        if (response.ok && data.valid) {
+          localStorage.setItem('opencode_gemini_key', keyVal);
+          initByokState();
+
+          testResult.style.background = 'rgba(34, 197, 94, 0.15)';
+          testResult.style.border = '1px solid var(--emerald)';
+          testResult.style.color = 'var(--emerald)';
+          testResult.innerHTML = `✅ <b>Verbindung erfolgreich!</b> Modell <code>${escapeHtml(data.model)}</code> antwortet fehlerfrei. Key wurde lokal gespeichert.`;
+          
+          showToast('🔑 Persönlicher Gemini API-Key gespeichert!', 'success');
+          const deleteBtn = document.getElementById('btn-byok-delete');
+          if (deleteBtn) deleteBtn.style.display = 'inline-block';
+          
+          setTimeout(() => {
+            closeByokModal();
+          }, 1400);
+        } else {
+          testResult.style.background = 'rgba(239, 68, 68, 0.15)';
+          testResult.style.border = '1px solid var(--rose)';
+          testResult.style.color = 'var(--rose)';
+          testResult.innerHTML = `❌ <b>Ungültiger API-Key:</b> ${escapeHtml(data.error || 'Authentifizierung fehlgeschlagen.')}`;
+        }
+      } catch (err) {
+        testResult.style.background = 'rgba(239, 68, 68, 0.15)';
+        testResult.style.border = '1px solid var(--rose)';
+        testResult.style.color = 'var(--rose)';
+        testResult.textContent = '❌ Netzwerkfehler beim Validieren des Keys.';
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = '🔑 Testen & Speichern';
+      }
+    }
+
+    function removeByokKey() {
+      localStorage.removeItem('opencode_gemini_key');
+      const inputKey = document.getElementById('byok-input-key');
+      if (inputKey) inputKey.value = '';
+      initByokState();
+      showToast('🗑️ Persönlicher API-Key entfernt.', 'info');
+      closeByokModal();
+    }
+
     // AI Check & Auto-Fix Modal
     function closeAiModal() {
       const modal = document.getElementById('ai-modal');
@@ -3546,20 +3768,40 @@
       footerBtn.disabled = true;
       footerBtn.textContent = 'Analysiere...';
       
-      addLogLine('🔌 Verbinde mit AI Studio Engine...', '#60a5fa');
+      const personalKey = localStorage.getItem('opencode_gemini_key');
+      if (personalKey) {
+        addLogLine('🔑 Eigener Google Gemini API-Key aktiv (Persönliches Kontingent)', '#34d399');
+      } else {
+        addLogLine('ℹ️ Standard Diagnose-Modus (Tipp: Trage deinen eigenen Gemini Key für Live-KI ein)', '#94a3b8');
+      }
+      
+      addLogLine('🔌 Verbinde mit OpenCode AI Engine & Schema-Validator...', '#60a5fa');
       
       try {
-        const response = await fetch('/api/ai-check-fix', { method: 'POST' });
+        const headers = { 'Content-Type': 'application/json' };
+        if (personalKey) {
+          headers['x-gemini-api-key'] = personalKey;
+        }
+
+        const response = await fetch('/api/ai-check-fix', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ config: currentConfig, apiKey: personalKey || undefined })
+        });
         const data = await response.json();
         
         if (data.status === 'success') {
+          if (data.engine) {
+            addLogLine(`⚡ Engine: ${data.engine}`, data.isPersonalKey ? '#34d399' : '#60a5fa');
+          }
+
           for (let i = 0; i < data.logs.length; i++) {
-            await new Promise(r => setTimeout(r, 400));
+            await new Promise(r => setTimeout(r, 350));
             const logStr = data.logs[i];
             let color = 'var(--text-main)';
             if (logStr.includes('⚠️')) color = 'var(--amber)';
-            if (logStr.includes('✅')) color = 'var(--emerald)';
-            if (logStr.includes('✨')) color = 'var(--accent-hover)';
+            if (logStr.includes('✅') || logStr.includes('✨')) color = 'var(--emerald)';
+            if (logStr.includes('💡') || logStr.includes('🔑')) color = '#93c5fd';
             addLogLine(logStr, color);
           }
           
@@ -3567,8 +3809,11 @@
           footerBtn.disabled = false;
           footerBtn.textContent = 'Schließen & Anwenden';
           showToast(data.message, 'success');
+          
+          // Refresh configuration in UI
+          loadInitialData();
         } else {
-          addLogLine('❌ Analyse fehlgeschlagen.', 'var(--rose)');
+          addLogLine('❌ Analyse fehlgeschlagen: ' + (data.message || 'Unbekannter Fehler'), 'var(--rose)');
           footerBtn.disabled = false;
           footerBtn.textContent = 'Schließen';
         }
@@ -3736,6 +3981,15 @@
           icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
           badge: 'Reset',
           action: () => resetConfigToDefault()
+        },
+        {
+          id: 'act-byok',
+          title: 'Google Gemini API-Key einrichten (BYOK)',
+          category: 'Aktionen',
+          desc: 'Eigenen kostenlosen Google AI Studio Key für persönliche Quota hinterlegen',
+          icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7 8.5 5.5 7 7l-1.5-1.5L4 7 2 5v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2z"/><circle cx="8" cy="14" r="2"/></svg>',
+          badge: 'API-Key',
+          action: () => openByokModal()
         },
         {
           id: 'act-toggle-wallpaper',

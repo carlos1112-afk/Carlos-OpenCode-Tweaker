@@ -1,0 +1,37 @@
+# GitLab CI/CD Pipeline for OpenCode Tweaker
+image: node:20-alpine
+
+stages:
+  - install
+  - test
+  - build
+
+cache:
+  paths:
+    - node_modules/
+    - .npm/
+
+install_dependencies:
+  stage: install
+  script:
+    - npm ci --cache .npm --prefer-offline
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+lint_and_typecheck:
+  stage: test
+  script:
+    - npm run lint
+  dependencies:
+    - install_dependencies
+
+compile_applet:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
