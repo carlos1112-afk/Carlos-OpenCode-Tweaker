@@ -215,6 +215,8 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      justify-content: flex-end;
+      flex: 1 1 auto;
     }
 
     /* BUTTON SUITE */
@@ -3811,7 +3813,7 @@
           showToast(data.message, 'success');
           
           // Refresh configuration in UI
-          loadInitialData();
+          loadAllData();
         } else {
           addLogLine('❌ Analyse fehlgeschlagen: ' + (data.message || 'Unbekannter Fehler'), 'var(--rose)');
           footerBtn.disabled = false;
