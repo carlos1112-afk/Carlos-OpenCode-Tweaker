@@ -70,10 +70,16 @@ npm run dev
 Öffne anschließend [http://localhost:3000](http://localhost:3000) im Browser.
 
 ### 5. Produktions-Build
+Für die Produktion muss das Projekt zunächst gebaut werden:
 ```bash
 npm run build
+```
+
+Anschließend kann der Server gestartet werden (dies setzt automatisch `NODE_ENV=production`):
+```bash
 npm start
 ```
+Hinweis: Wenn der Port 3000 bereits belegt ist, erhältst du eine Fehlermeldung und der Server beendet sich sauber. Beende in diesem Fall den anderen Prozess.
 
 ---
 
