@@ -1801,7 +1801,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary btn-sm" onclick="copyAiLogs()" id="ai-modal-copy-btn">📋 Logs Kopieren</button>
-        <button class="btn btn-primary" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
+        <button class="btn btn-primary btn-sm" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
       </div>
     </div>
   </div>
@@ -3811,7 +3811,7 @@
           showToast(data.message, 'success');
           
           // Refresh configuration in UI
-          loadInitialData();
+          loadAllData();
         } else {
           addLogLine('❌ Analyse fehlgeschlagen: ' + (data.message || 'Unbekannter Fehler'), 'var(--rose)');
           footerBtn.disabled = false;
