@@ -590,8 +590,18 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
+  });
+
+  server.on('error', (e: any) => {
+    if (e.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
+      process.exit(1);
+    } else {
+      console.error(`Server error:`, e);
+      process.exit(1);
+    }
   });
 }
 
