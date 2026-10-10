@@ -113,13 +113,13 @@
 
     /* HEADER BAR */
     .top-header {
-      height: 64px;
+      min-height: 64px;
       background: rgba(14, 16, 23, 0.95);
       border-bottom: 1px solid rgba(59, 130, 246, 0.25);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 12px 24px;
       flex-shrink: 0;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
       gap: 16px;
@@ -215,6 +215,8 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      justify-content: flex-end;
+      flex: 1 1 auto;
     }
 
     /* BUTTON SUITE */
@@ -1801,7 +1803,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary btn-sm" onclick="copyAiLogs()" id="ai-modal-copy-btn">📋 Logs Kopieren</button>
-        <button class="btn btn-primary" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
+        <button class="btn btn-primary btn-sm" id="ai-modal-close-btn" onclick="closeAiModal()" disabled>Analysiere...</button>
       </div>
     </div>
   </div>
@@ -3811,7 +3813,7 @@
           showToast(data.message, 'success');
           
           // Refresh configuration in UI
-          loadInitialData();
+          loadAllData();
         } else {
           addLogLine('❌ Analyse fehlgeschlagen: ' + (data.message || 'Unbekannter Fehler'), 'var(--rose)');
           footerBtn.disabled = false;
@@ -3980,7 +3982,7 @@
           desc: 'Stellt die offizielle opencode.json Standardkonfiguration wieder her',
           icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
           badge: 'Reset',
-          action: () => resetConfigToDefault()
+          action: () => resetConfigToDefaults()
         },
         {
           id: 'act-byok',
@@ -4009,7 +4011,7 @@
           desc: 'Ausgewogenes Setup für allgemeine Software-Entwicklung',
           icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
           badge: 'Preset',
-          action: () => applyPreset('general')
+          action: () => applyPreset('optimal')
         },
         {
           id: 'preset-fullstack',
@@ -4018,7 +4020,7 @@
           desc: 'Tailwind, Node/TS LSP, Playwright Browser und React Tools',
           icon: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
           badge: 'Preset',
-          action: () => applyPreset('fullstack')
+          action: () => applyPreset('web')
         },
         {
           id: 'preset-python',
