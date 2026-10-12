@@ -509,7 +509,7 @@ Analysiere die bereitgestellte opencode.json Konfiguration auf Fehler, veraltete
       let parsed;
       try {
         parsed = JSON.parse(cleanedJson);
-      } catch (parseErr) {
+      } catch (parseErr: unknown) {
         // Fallback if parsing failed
         parsed = {
           logs: [
