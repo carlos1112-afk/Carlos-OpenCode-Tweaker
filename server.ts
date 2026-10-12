@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 
 const app = express();
 const PORT = 3000;
@@ -60,7 +60,7 @@ app.post("/api/config", (req, res) => {
     };
     res.json(currentConfig);
   } catch (err: unknown) {
-    res.status(400).json({ error: "Invalid configuration payload", details: err instanceof Error ? err.message : String(err) });
+    res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
   }
 });
 
@@ -445,7 +445,7 @@ app.post("/api/gemini/validate-key", async (req, res) => {
   } catch (err: unknown) {
     return res.status(400).json({
       valid: false,
-      error: (err instanceof Error ? err.message : undefined) || "Fehler bei der Validierung des API-Keys. Bitte prüfe die Gültigkeit bei Google AI Studio."
+      error: (err instanceof Error ? err.message : String(err)) || "Fehler bei der Validierung des API-Keys. Bitte prüfe die Gültigkeit bei Google AI Studio."
     });
   }
 });
@@ -460,32 +460,47 @@ app.post("/api/ai-check-fix", async (req, res) => {
   if (apiKey && apiKey.trim().length > 10) {
     try {
       const ai = new GoogleGenAI({ apiKey: apiKey.trim() });
-      const prompt = `Du bist ein Experte für OpenCode Konfigurationen (opencode.json), MCP-Server, LSP-Server, Plugins und KI-Modelle.
-Analysiere die folgende opencode.json Konfiguration auf Fehler, veraltete Abhängigkeiten, fehlende Parameter und Performance-Optimierungen:
 
-\`\`\`json
-${JSON.stringify(targetConfig, null, 2)}
-\`\`\`
-
-Gib deine Analyse als strukturiertes JSON im folgenden Format zurück:
-{
-  "logs": [
-    "Schritt 1 Beschreibung...",
-    "Schritt 2 Beschreibung...",
-    "Gefundene Optimierung / Korrektur...",
-    "Abschlussbericht..."
-  ],
-  "fixes": [
-    { "type": "Plugin|LSP|MCP|Model|Theme|Config", "name": "Name des Eintrags", "oldSource": "Vorher", "newSource": "Empfohlener Wert" }
-  ],
-  "improvedConfig": { ...optimierte vollständige opencode.json... },
-  "summary": "Kurze prägnante Zusammenfassung der durchgeführten Optimierungen."
-}
-Antworte NUR mit reinem JSON ohne Markdown-Backticks.`;
+      const systemInstruction = `Du bist ein Experte für OpenCode Konfigurationen (opencode.json), MCP-Server, LSP-Server, Plugins und KI-Modelle.
+Analysiere die bereitgestellte opencode.json Konfiguration auf Fehler, veraltete Abhängigkeiten, fehlende Parameter und Performance-Optimierungen.`;
 
       const geminiResponse = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: prompt,
+        contents: JSON.stringify(targetConfig, null, 2),
+        config: {
+          systemInstruction,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              logs: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description: "Detaillierte Schritte der Analyse",
+              },
+              fixes: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    type: { type: Type.STRING, description: "Plugin|LSP|MCP|Model|Theme|Config" },
+                    name: { type: Type.STRING, description: "Name des Eintrags" },
+                    oldSource: { type: Type.STRING, description: "Vorher" },
+                    newSource: { type: Type.STRING, description: "Empfohlener Wert" }
+                  }
+                }
+              },
+              improvedConfig: {
+                type: Type.OBJECT,
+                description: "Die optimierte vollständige opencode.json"
+              },
+              summary: {
+                type: Type.STRING,
+                description: "Kurze prägnante Zusammenfassung der durchgeführten Optimierungen."
+              }
+            }
+          }
+        }
       });
 
       const text = geminiResponse?.text?.trim() || "";
@@ -494,7 +509,7 @@ Antworte NUR mit reinem JSON ohne Markdown-Backticks.`;
       let parsed;
       try {
         parsed = JSON.parse(cleanedJson);
-      } catch (parseErr) {
+      } catch (parseErr: unknown) {
         // Fallback if parsing failed
         parsed = {
           logs: [
@@ -528,7 +543,7 @@ Antworte NUR mit reinem JSON ohne Markdown-Backticks.`;
       });
 
     } catch (aiErr: unknown) {
-      console.warn("Gemini API call failed, falling back to heuristic engine:", aiErr instanceof Error ? aiErr.message : String(aiErr));
+      console.warn("Gemini API call failed, falling back to heuristic engine:", (aiErr instanceof Error ? aiErr.message : String(aiErr)));
     }
   }
 
