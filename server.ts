@@ -59,8 +59,8 @@ app.post("/api/config", (req, res) => {
       ...newConfig
     };
     res.json(currentConfig);
-  } catch (err: any) {
-    res.status(400).json({ error: "Invalid configuration payload", details: err?.message });
+  } catch (err: unknown) {
+    res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
   }
 });
 
@@ -442,10 +442,10 @@ app.post("/api/gemini/validate-key", async (req, res) => {
     } else {
       return res.status(400).json({ valid: false, error: "Keine gültige Antwort vom Gemini-Modell erhalten." });
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     return res.status(400).json({
       valid: false,
-      error: err?.message || "Fehler bei der Validierung des API-Keys. Bitte prüfe die Gültigkeit bei Google AI Studio."
+      error: (err instanceof Error ? err.message : String(err)) || "Fehler bei der Validierung des API-Keys. Bitte prüfe die Gültigkeit bei Google AI Studio."
     });
   }
 });
@@ -527,8 +527,8 @@ Antworte NUR mit reinem JSON ohne Markdown-Backticks.`;
         fixes: parsed.fixes || []
       });
 
-    } catch (aiErr: any) {
-      console.warn("Gemini API call failed, falling back to heuristic engine:", aiErr?.message);
+    } catch (aiErr: unknown) {
+      console.warn("Gemini API call failed, falling back to heuristic engine:", (aiErr instanceof Error ? aiErr.message : String(aiErr)));
     }
   }
 
