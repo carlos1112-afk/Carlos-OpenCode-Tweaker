@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
@@ -7,6 +8,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'src', 'assets')));
 
