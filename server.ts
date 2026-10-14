@@ -45,6 +45,14 @@ let currentConfig: Record<string, any> = {
 };
 
 // DEEP MERGE HELPER
+/**
+ * Merge source configuration keys into target, preserving omitted target keys.
+ * Nested non-array source objects merge recursively; other property values,
+ * including arrays and null, replace the target value. If either input is not
+ * an object or is null, or both are arrays, return source directly. Otherwise,
+ * return a new plain object (mixed array/object inputs merge enumerable keys).
+ * Inputs are not modified, but unchanged nested values and arrays may be shared.
+ */
 function deepMerge(target: any, source: any): any {
   if (typeof target !== 'object' || target === null) return source;
   if (typeof source !== 'object' || source === null) return source;
@@ -70,6 +78,12 @@ app.get("/api/config", (req, res) => {
   res.json(currentConfig);
 });
 
+/**
+ * Merge the request body into the shared in-memory configuration, restore the
+ * OpenCode schema URL, and respond with the resulting configuration as JSON.
+ * A falsy body is treated as an empty update. Caught errors produce HTTP 400
+ * with error details; configuration changes made before an error are not undone.
+ */
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
@@ -468,6 +482,19 @@ app.post("/api/gemini/validate-key", async (req, res) => {
   }
 });
 
+/**
+ * Analyze body.config (or the shared configuration) with Gemini, preferring a
+ * request key from x-gemini-api-key or body.apiKey over the server key when its
+ * trimmed length exceeds 10 characters. Merge an object-valued improvedConfig
+ * into the shared in-memory configuration and restore the OpenCode schema URL.
+ * Respond with status, message, key provenance, engine, logs, and fixes as JSON.
+ * Invalid Gemini JSON becomes a text summary. Missing usable keys or caught
+ * Gemini processing errors yield static diagnostics after a 1.5-second delay;
+ * the fallback itself does not update the configuration.
+ *
+ * @throws {TypeError} Rejects if a truthy request key is not a string, before
+ * entering the Gemini error handler.
+ */
 app.post("/api/ai-check-fix", async (req, res) => {
   const userKey = (req.headers["x-gemini-api-key"] as string) || req.body?.apiKey;
   const apiKey = (userKey && userKey.trim().length > 10) ? userKey.trim() : process.env.GEMINI_API_KEY;
