@@ -3608,6 +3608,14 @@
     }
 
     // BYOK (BRING YOUR OWN KEY) MANAGEMENT
+    /**
+     * Refresh the key label, button, and status badge from opencode_gemini_key in
+     * localStorage. A nonblank value selects the personal-key state without
+     * validating the key; otherwise show the server-key/fallback state. Missing
+     * UI elements are skipped.
+     *
+     * @throws {DOMException} If browser policy denies access to localStorage.
+     */
     function initByokState() {
       const savedKey = localStorage.getItem('opencode_gemini_key');
       const headerLabel = document.getElementById('byok-header-label');
