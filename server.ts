@@ -8,6 +8,32 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function deepMerge(target: any, ...sources: any[]): any {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      // Prevent prototype pollution
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        continue;
+      }
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        deepMerge(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return deepMerge(target, ...sources);
+}
 app.use('/assets', express.static(path.join(process.cwd(), 'src', 'assets')));
 
 // IN-MEMORY / LOCAL CONFIG STORE FOR DEMO & TESTING
@@ -52,12 +78,12 @@ app.get("/api/config", (req, res) => {
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
-    // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    // Safe merge preserving schema using deep merge for nested properties
+    currentConfig = deepMerge(
+      { "$schema": "https://opencode.ai/config.json" },
+      currentConfig,
+      newConfig
+    );
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
