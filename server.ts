@@ -44,6 +44,30 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function isObject(item: unknown): item is Record<string, unknown> {
+  return (item !== null && typeof item === 'object' && !Array.isArray(item));
+}
+
+function deepMerge(target: any, ...sources: any[]): any {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (['__proto__', 'constructor', 'prototype'].includes(key)) {
+        continue;
+      }
+      if (isObject(source[key])) {
+        if (!isObject(target[key])) Object.assign(target, { [key]: {} });
+        deepMerge(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+  return deepMerge(target, ...sources);
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -53,11 +77,8 @@ app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
     // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    const baseConfig = { "$schema": "https://opencode.ai/config.json" };
+    currentConfig = deepMerge(baseConfig, currentConfig, newConfig);
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
