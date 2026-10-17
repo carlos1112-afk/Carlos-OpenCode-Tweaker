@@ -44,6 +44,19 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function deepMerge(target: any, source: any) {
+  for (const key of Object.keys(source)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") continue;
+
+    if (source[key] instanceof Object && !Array.isArray(source[key]) && target[key] instanceof Object && !Array.isArray(target[key])) {
+      target[key] = deepMerge(Object.assign({}, target[key]), source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -53,11 +66,8 @@ app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
     // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    currentConfig = deepMerge(Object.assign({}, currentConfig), newConfig);
+    currentConfig["$schema"] = "https://opencode.ai/config.json";
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -609,8 +619,9 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    const error = e as NodeJS.ErrnoException;
+    if (error.code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {
