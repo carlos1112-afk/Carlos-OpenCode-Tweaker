@@ -44,6 +44,37 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function deepMerge(target: any, source: any): any {
+  if (typeof target !== "object" || target === null) {
+    return source;
+  }
+  if (typeof source !== "object" || source === null) {
+    return source;
+  }
+
+  if (Array.isArray(target) && Array.isArray(source)) {
+    // Basic replacement for arrays in this config context.
+    return source;
+  }
+
+  for (const key in source) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (key === "__proto__" || key === "constructor" || key === "prototype") {
+        continue;
+      }
+      if (typeof source[key] === "object" && source[key] !== null) {
+        if (!target[key] || typeof target[key] !== "object") {
+          target[key] = Array.isArray(source[key]) ? [] : {};
+        }
+        target[key] = deepMerge(target[key], source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -52,12 +83,10 @@ app.get("/api/config", (req, res) => {
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
-    // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    // Deep merge preserving schema
+    const mergedConfig = deepMerge({ ...currentConfig }, newConfig);
+    mergedConfig["$schema"] = "https://opencode.ai/config.json";
+    currentConfig = mergedConfig;
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -609,8 +638,8 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    if (e instanceof Error && 'code' in e && (e as any).code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {

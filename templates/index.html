@@ -583,6 +583,10 @@
       transition: border-color 0.2s;
     }
 
+    .search-wrapper .input-field {
+      padding-right: 32px;
+    }
+
     .input-field:focus, .select-field:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px var(--accent-glow);
@@ -1469,7 +1473,7 @@
             </div>
             <div class="card">
               <div class="card-title">Haupt KI-Modell</div>
-              <div class="stat-value" id="stat-model" style="font-size: 15px; margin-top: 6px; word-break: break-all; color: var(--accent-hover);">-</div>
+              <div class="stat-value" id="stat-model" style="font-size: 15px; margin-top: 6px; word-break: break-word; overflow-wrap: anywhere; color: var(--accent-hover);">-</div>
               <div class="stat-sub">Standard LLM Provider</div>
             </div>
           </div>
