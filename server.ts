@@ -10,6 +10,31 @@ const PORT = 3000;
 app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'src', 'assets')));
 
+function deepMerge(target: any, source: any): any {
+  if (!target || typeof target !== "object") target = {};
+  if (!source || typeof source !== "object") return target;
+
+  for (const key of Object.keys(source)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") continue;
+
+    const sourceVal = source[key];
+    const targetVal = target[key];
+
+    if (Array.isArray(sourceVal)) {
+      target[key] = [...sourceVal];
+    } else if (typeof sourceVal === "object" && sourceVal !== null) {
+      if (typeof targetVal === "object" && targetVal !== null && !Array.isArray(targetVal)) {
+        target[key] = deepMerge({ ...targetVal }, sourceVal);
+      } else {
+        target[key] = deepMerge({}, sourceVal);
+      }
+    } else {
+      target[key] = sourceVal;
+    }
+  }
+  return target;
+}
+
 // IN-MEMORY / LOCAL CONFIG STORE FOR DEMO & TESTING
 let currentConfig: Record<string, any> = {
   "$schema": "https://opencode.ai/config.json",
@@ -53,11 +78,10 @@ app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
     // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
+    currentConfig = deepMerge({
       ...currentConfig,
-      ...newConfig
-    };
+      "$schema": "https://opencode.ai/config.json"
+    }, newConfig);
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -523,11 +547,10 @@ Analysiere die bereitgestellte opencode.json Konfiguration auf Fehler, veraltete
       }
 
       if (parsed.improvedConfig && typeof parsed.improvedConfig === "object") {
-        currentConfig = {
-          "$schema": "https://opencode.ai/config.json",
+        currentConfig = deepMerge({
           ...currentConfig,
-          ...parsed.improvedConfig
-        };
+          "$schema": "https://opencode.ai/config.json"
+        }, parsed.improvedConfig);
       }
 
       return res.json({
