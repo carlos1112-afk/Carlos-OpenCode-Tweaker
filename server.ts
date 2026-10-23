@@ -44,6 +44,32 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function deepMerge(target: Record<string, any>, source: Record<string, any>): Record<string, any> {
+  const output = { ...target };
+  if (target && typeof target === 'object' && source && typeof source === 'object') {
+    Object.keys(source).forEach((key) => {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') return;
+
+      const sourceValue = source[key];
+      if (sourceValue === undefined) return;
+
+      if (
+        sourceValue !== null &&
+        typeof sourceValue === 'object' &&
+        !Array.isArray(sourceValue) &&
+        output[key] !== null &&
+        typeof output[key] === 'object' &&
+        !Array.isArray(output[key])
+      ) {
+        output[key] = deepMerge(output[key] || {}, sourceValue);
+      } else {
+        output[key] = sourceValue;
+      }
+    });
+  }
+  return output;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -52,12 +78,9 @@ app.get("/api/config", (req, res) => {
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
-    // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    // Safe deep merge preserving nested structures and schema
+    currentConfig = deepMerge(currentConfig, newConfig);
+    currentConfig["$schema"] = "https://opencode.ai/config.json";
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -523,11 +546,8 @@ Analysiere die bereitgestellte opencode.json Konfiguration auf Fehler, veraltete
       }
 
       if (parsed.improvedConfig && typeof parsed.improvedConfig === "object") {
-        currentConfig = {
-          "$schema": "https://opencode.ai/config.json",
-          ...currentConfig,
-          ...parsed.improvedConfig
-        };
+        currentConfig = deepMerge(currentConfig, parsed.improvedConfig);
+        currentConfig["$schema"] = "https://opencode.ai/config.json";
       }
 
       return res.json({
@@ -609,8 +629,8 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    if (e instanceof Error && (e as any).code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {
