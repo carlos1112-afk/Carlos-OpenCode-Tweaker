@@ -44,6 +44,33 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function isObject(item: any): item is Record<string, any> {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function deepMerge(target: any, source: any): any {
+  if (!isObject(target) || !isObject(source)) {
+    return source;
+  }
+
+  const output = { ...target };
+
+  for (const key of Object.keys(source)) {
+    if (['__proto__', 'constructor', 'prototype'].includes(key)) continue;
+
+    if (isObject(source[key])) {
+      if (key in target) {
+        output[key] = deepMerge(target[key], source[key]);
+      } else {
+        output[key] = source[key];
+      }
+    } else {
+      output[key] = source[key];
+    }
+  }
+  return output;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -52,12 +79,9 @@ app.get("/api/config", (req, res) => {
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
-    // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    // Safe deep merge preserving schema
+    currentConfig = deepMerge(currentConfig, newConfig);
+    currentConfig["$schema"] = "https://opencode.ai/config.json";
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -523,11 +547,8 @@ Analysiere die bereitgestellte opencode.json Konfiguration auf Fehler, veraltete
       }
 
       if (parsed.improvedConfig && typeof parsed.improvedConfig === "object") {
-        currentConfig = {
-          "$schema": "https://opencode.ai/config.json",
-          ...currentConfig,
-          ...parsed.improvedConfig
-        };
+        currentConfig = deepMerge(currentConfig, parsed.improvedConfig);
+        currentConfig["$schema"] = "https://opencode.ai/config.json";
       }
 
       return res.json({
