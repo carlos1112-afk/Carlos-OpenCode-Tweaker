@@ -49,15 +49,38 @@ app.get("/api/config", (req, res) => {
   res.json(currentConfig);
 });
 
+function deepMerge(target: any, source: any): any {
+  if (typeof target !== "object" || target === null) {
+    return source;
+  }
+  if (typeof source !== "object" || source === null) {
+    return source;
+  }
+
+  const output = { ...target };
+  for (const key of Object.keys(source)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
+      continue;
+    }
+    if (typeof source[key] === "object" && source[key] !== null) {
+      if (Array.isArray(source[key])) {
+        output[key] = [...source[key]];
+      } else {
+        output[key] = deepMerge(output[key] || {}, source[key]);
+      }
+    } else {
+      output[key] = source[key];
+    }
+  }
+  return output;
+}
+
 app.post("/api/config", (req, res) => {
   try {
     const newConfig = req.body || {};
     // Safe merge preserving schema
-    currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
-    };
+    currentConfig = deepMerge(currentConfig, newConfig);
+    currentConfig["$schema"] = "https://opencode.ai/config.json";
     res.json(currentConfig);
   } catch (err: unknown) {
     res.status(400).json({ error: "Invalid configuration payload", details: (err instanceof Error ? err.message : String(err)) });
@@ -609,8 +632,9 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    const err = e as { code?: string };
+    if (err && err.code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {
