@@ -51,12 +51,23 @@ app.get("/api/config", (req, res) => {
 
 app.post("/api/config", (req, res) => {
   try {
-    const newConfig = req.body || {};
-    // Safe merge preserving schema
+    const newConfig = req.body;
+    if (!newConfig || typeof newConfig !== 'object' || Array.isArray(newConfig)) {
+      throw new Error("Payload must be a non-null object");
+    }
+
+    // Filter out prototype-sensitive keys
+    const safeConfig: Record<string, any> = {};
+    for (const key in newConfig) {
+      if (key !== '__proto__' && key !== 'constructor' && key !== 'prototype') {
+        safeConfig[key] = newConfig[key];
+      }
+    }
+
+    // Replacement semantics preserving schema
     currentConfig = {
       "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
+      ...safeConfig
     };
     res.json(currentConfig);
   } catch (err: unknown) {
