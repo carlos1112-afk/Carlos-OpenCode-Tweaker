@@ -44,6 +44,34 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function isPlainObject(val: unknown): val is Record<string, any> {
+  return typeof val === "object" && val !== null && !Array.isArray(val);
+}
+
+function sanitizeValue(val: unknown): any {
+  if (isPlainObject(val)) {
+    return sanitizeObject(val);
+  }
+  if (Array.isArray(val)) {
+    return val.map(item => sanitizeValue(item));
+  }
+  return val;
+}
+
+function sanitizeObject<T>(obj: T): T {
+  if (!isPlainObject(obj)) {
+    return obj;
+  }
+  const clean: Record<string, any> = {};
+  for (const key of Object.keys(obj)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
+      continue;
+    }
+    clean[key] = sanitizeValue((obj as Record<string, any>)[key]);
+  }
+  return clean as T;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -51,12 +79,18 @@ app.get("/api/config", (req, res) => {
 
 app.post("/api/config", (req, res) => {
   try {
-    const newConfig = req.body || {};
-    // Safe merge preserving schema
+    const contentType = req.headers["content-type"] || "";
+    if (!contentType.includes("application/json")) {
+      return res.status(400).json({ error: "Content-Type must be application/json" });
+    }
+    const newConfig = req.body;
+    if (!isPlainObject(newConfig)) {
+      return res.status(400).json({ error: "Configuration body must be a non-null JSON object" });
+    }
+    const sanitized = sanitizeObject(newConfig);
     currentConfig = {
       "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
+      ...sanitized
     };
     res.json(currentConfig);
   } catch (err: unknown) {

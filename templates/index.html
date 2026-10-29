@@ -2925,6 +2925,10 @@
       try {
         const rawText = document.getElementById('config-editor').value;
         const parsed = JSON.parse(rawText);
+        if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+          if (!silent) showToast('Konfiguration muss ein JSON-Objekt sein!', 'error');
+          return;
+        }
         currentConfig = parsed;
         syncStateFromConfig();
         await saveConfig(silent);
