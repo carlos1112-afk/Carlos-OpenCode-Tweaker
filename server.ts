@@ -44,6 +44,27 @@ let currentConfig: Record<string, any> = {
   "experimental": {}
 };
 
+function sanitizeValue(val: any): any {
+  if (Array.isArray(val)) {
+    return val.map(sanitizeValue);
+  } else if (val !== null && typeof val === 'object') {
+    return sanitizeObject(val);
+  }
+  return val;
+}
+
+function sanitizeObject(obj: any): any {
+  if (typeof obj !== 'object' || obj === null) return obj;
+  const safe: Record<string, any> = {};
+  for (const key of Object.keys(obj)) {
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      continue;
+    }
+    safe[key] = sanitizeValue(obj[key]);
+  }
+  return safe;
+}
+
 // API ROUTES
 app.get("/api/config", (req, res) => {
   res.json(currentConfig);
@@ -51,12 +72,21 @@ app.get("/api/config", (req, res) => {
 
 app.post("/api/config", (req, res) => {
   try {
-    const newConfig = req.body || {};
-    // Safe merge preserving schema
+    if (req.headers["content-type"] !== "application/json") {
+      return res.status(400).json({ error: "Invalid Content-Type, expected application/json" });
+    }
+
+    const newConfig = req.body;
+    if (typeof newConfig !== 'object' || newConfig === null || Array.isArray(newConfig)) {
+      return res.status(400).json({ error: "Configuration body must be a plain object" });
+    }
+
+    const sanitizedConfig = sanitizeObject(newConfig);
+
+    // Safe replacement preserving schema
     currentConfig = {
-      "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
+      ...sanitizedConfig,
+      "$schema": "https://opencode.ai/config.json"
     };
     res.json(currentConfig);
   } catch (err: unknown) {
