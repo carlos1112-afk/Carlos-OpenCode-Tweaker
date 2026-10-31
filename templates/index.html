@@ -1771,7 +1771,7 @@
                     Jeder Besucher dieser App kann seinen persönlichen kostenlosen Google Gemini API-Key verwenden. Der Key wird rein clientseitig im lokalen Speicher deines Browsers aufbewahrt und für Echtzeit-KI-Analysen genutzt.
                   </div>
                 </div>
-                <div id="byok-status-pill" class="badge badge-secondary" style="font-size: 11px; padding: 4px 10px;">
+                <div id="byok-status-pill" class="badge badge-gray" style="font-size: 11px; padding: 4px 10px;">
                   Status: Standard Server-Key
                 </div>
               </div>
@@ -3631,7 +3631,7 @@
           headerBtn.title = 'Persönlicher Gemini API-Key aktiv (Klick zum Verwalten)';
         }
         if (statusPill) {
-          statusPill.className = 'badge badge-success';
+          statusPill.className = 'badge badge-green';
           statusPill.textContent = 'Status: Eigener Google Key Aktiv';
         }
       } else {
@@ -3642,7 +3642,7 @@
           headerBtn.title = 'Eigenen Gemini API-Key hinterlegen (BYOK)';
         }
         if (statusPill) {
-          statusPill.className = 'badge badge-secondary';
+          statusPill.className = 'badge badge-gray';
           statusPill.textContent = 'Status: Standard Server-Key / Fallback';
         }
       }
