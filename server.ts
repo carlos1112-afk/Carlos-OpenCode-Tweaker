@@ -74,7 +74,8 @@ app.get("/api/config", (req, res) => {
 
 app.post("/api/config", (req, res) => {
   try {
-    if (req.headers["content-type"] !== "application/json") {
+    const contentType = req.headers["content-type"] || "";
+    if (!contentType.includes("application/json")) {
       return res.status(400).json({ error: "Invalid Content-Type, expected application/json" });
     }
 
