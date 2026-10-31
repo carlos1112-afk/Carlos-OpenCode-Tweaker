@@ -10,6 +10,29 @@ const PORT = 3000;
 app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'src', 'assets')));
 
+// UTILITY: Object sanitization to scrub prototype-polluting keys
+function sanitizeValue(val: any): any {
+  if (Array.isArray(val)) {
+    return val.map(sanitizeValue);
+  } else if (val !== null && typeof val === "object") {
+    return sanitizeObject(val);
+  }
+  return val;
+}
+
+function sanitizeObject(obj: Record<string, any>): Record<string, any> {
+  const sanitized: Record<string, any> = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (key === "__proto__" || key === "constructor" || key === "prototype") {
+        continue;
+      }
+      sanitized[key] = sanitizeValue(obj[key]);
+    }
+  }
+  return sanitized;
+}
+
 // IN-MEMORY / LOCAL CONFIG STORE FOR DEMO & TESTING
 let currentConfig: Record<string, any> = {
   "$schema": "https://opencode.ai/config.json",
@@ -51,12 +74,22 @@ app.get("/api/config", (req, res) => {
 
 app.post("/api/config", (req, res) => {
   try {
-    const newConfig = req.body || {};
-    // Safe merge preserving schema
+    if (req.headers["content-type"] !== "application/json") {
+      return res.status(400).json({ error: "Invalid Content-Type, expected application/json" });
+    }
+
+    const newConfig = req.body;
+    if (!newConfig || typeof newConfig !== "object" || Array.isArray(newConfig)) {
+      return res.status(400).json({ error: "Invalid configuration payload: must be a plain object" });
+    }
+
+    // Sanitize to avoid prototype pollution
+    const sanitizedConfig = sanitizeObject(newConfig);
+
+    // Save with replacement semantics preserving the schema
     currentConfig = {
       "$schema": "https://opencode.ai/config.json",
-      ...currentConfig,
-      ...newConfig
+      ...sanitizedConfig
     };
     res.json(currentConfig);
   } catch (err: unknown) {
