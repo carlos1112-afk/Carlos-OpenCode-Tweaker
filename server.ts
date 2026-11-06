@@ -643,12 +643,12 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    if (e instanceof Error && 'code' in e && (e as any).code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {
-      console.error(`Server error:`, e);
+      console.error(`Server error:`, e instanceof Error ? e.message : String(e));
       process.exit(1);
     }
   });
