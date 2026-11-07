@@ -11,17 +11,17 @@ app.use(express.json());
 app.use('/assets', express.static(path.join(process.cwd(), 'src', 'assets')));
 
 // UTILITY: Object sanitization to scrub prototype-polluting keys
-function sanitizeValue(val: any): any {
+function sanitizeValue(val: unknown): unknown {
   if (Array.isArray(val)) {
     return val.map(sanitizeValue);
   } else if (val !== null && typeof val === "object") {
-    return sanitizeObject(val);
+    return sanitizeObject(val as Record<string, unknown>);
   }
   return val;
 }
 
-function sanitizeObject(obj: Record<string, any>): Record<string, any> {
-  const sanitized: Record<string, any> = {};
+function sanitizeObject(obj: Record<string, unknown>): Record<string, unknown> {
+  const sanitized: Record<string, unknown> = {};
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       if (key === "__proto__" || key === "constructor" || key === "prototype") {
@@ -34,7 +34,7 @@ function sanitizeObject(obj: Record<string, any>): Record<string, any> {
 }
 
 // IN-MEMORY / LOCAL CONFIG STORE FOR DEMO & TESTING
-let currentConfig: Record<string, any> = {
+let currentConfig: Record<string, unknown> = {
   "$schema": "https://opencode.ai/config.json",
   "model": "anthropic/claude-3-7-sonnet",
   "small_model": "anthropic/claude-3-5-haiku",
@@ -643,8 +643,8 @@ async function startServer() {
     console.log(`OpenCode Tweaker running on http://0.0.0.0:${PORT}`);
   });
 
-  server.on('error', (e: any) => {
-    if (e.code === 'EADDRINUSE') {
+  server.on('error', (e: unknown) => {
+    if (e instanceof Error && (e as any).code === 'EADDRINUSE') {
       console.error(`Port ${PORT} is already in use. Please close the other process or specify a different port.`);
       process.exit(1);
     } else {
